@@ -26,6 +26,7 @@ namespace MultiClientServer
 
             Console.Write("Verbonden met poort ");
             Console.WriteLine(MijnPoort);
+            //System.Threading.Thread.Sleep(1000);
             for (int i = 1; i < args.Length; i++) {
                 int poort = int.Parse(args[i]);
                 if (Buren.ContainsKey(poort))
