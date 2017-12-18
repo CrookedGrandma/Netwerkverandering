@@ -24,9 +24,11 @@ namespace MultiClientServer
             //Console.WriteLine("Typ [verbind poortnummer] om verbinding te maken, bijvoorbeeld: verbind 1100");
             //Console.WriteLine("Typ [poortnummer bericht] om een bericht te sturen, bijvoorbeeld: 1100 hoi hoi");
 
+            Console.Write("Verbonden met poort ");
+            Console.WriteLine(MijnPoort);
             for (int i = 1; i < args.Length; i++) {
                 int poort = int.Parse(args[i]);
-                if (Buren.ContainsKey(poort))
+                if (!Buren.ContainsKey(poort))
                     Console.WriteLine("Hier is al verbinding naar!");
                 else {
                     // Leg verbinding aan (als client)

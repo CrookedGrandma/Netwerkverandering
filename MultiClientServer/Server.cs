@@ -36,7 +36,9 @@ namespace MultiClientServer
                 Console.WriteLine("Client maakt verbinding: " + zijnPoort);
 
                 // Zet de nieuwe verbinding in de verbindingslijst
-                Program.Buren.Add(zijnPoort, new Connection(clientIn, clientOut));
+                if (!Program.Buren.ContainsKey(zijnPoort)) {
+                    Program.Buren.Add(zijnPoort, new Connection(clientIn, clientOut));
+                }
             }
         }
     }
