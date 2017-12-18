@@ -28,7 +28,7 @@ namespace MultiClientServer
             Console.WriteLine(MijnPoort);
             for (int i = 1; i < args.Length; i++) {
                 int poort = int.Parse(args[i]);
-                if (!Buren.ContainsKey(poort))
+                if (Buren.ContainsKey(poort))
                     Console.WriteLine("Hier is al verbinding naar!");
                 else {
                     // Leg verbinding aan (als client)
