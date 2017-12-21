@@ -2,47 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace MultiClientServer
 {
     class Program
     {
         static public int MijnPoort;
-
+        static private Object thislock = new Object();
         static public Dictionary<int, Connection> Buren = new Dictionary<int, Connection>();
 
         static void Main(string[] args)
         {
-            //foreach (string l in args) {
-            //    Console.WriteLine(l);
-            //}
+
             //Console.Write("Op welke poort ben ik server? ");
             //MijnPoort = int.Parse(Console.ReadLine());
-            MijnPoort = int.Parse(args[0]);
-            new Server(MijnPoort);
+                MijnPoort = int.Parse(args[0]);
+                new Server(MijnPoort);
 
-            //Console.WriteLine("Typ [verbind poortnummer] om verbinding te maken, bijvoorbeeld: verbind 1100");
-            //Console.WriteLine("Typ [poortnummer bericht] om een bericht te sturen, bijvoorbeeld: 1100 hoi hoi");
+                //Console.WriteLine("Typ [verbind poortnummer] om verbinding te maken, bijvoorbeeld: verbind 1100");
+                //Console.WriteLine("Typ [poortnummer bericht] om een bericht te sturen, bijvoorbeeld: 1100 hoi hoi");
 
-            Console.Write("Verbonden met poort ");
-            Console.WriteLine(MijnPoort);
-            //System.Threading.Thread.Sleep(1000);
-            for (int i = 1; i < args.Length; i++) {
-                int poort = int.Parse(args[i]);
-                if (Buren.ContainsKey(poort))
-                    Console.WriteLine("Hier is al verbinding naar!");
-                else {
-                    // Leg verbinding aan (als client)
-                    Buren.Add(poort, new Connection(poort));
-                }
-            }
-
-            while (true)
-            {
-                string input = Console.ReadLine();
-                if (input.StartsWith("verbind"))
+                Console.Write("Verbonden met poort ");
+                Console.WriteLine(MijnPoort);
+                for (int i = 1; i < args.Length; i++)
                 {
-                    int poort = int.Parse(input.Split()[1]);
+                    int poort = int.Parse(args[i]);
                     if (Buren.ContainsKey(poort))
                         Console.WriteLine("Hier is al verbinding naar!");
                     else
@@ -51,17 +36,33 @@ namespace MultiClientServer
                         Buren.Add(poort, new Connection(poort));
                     }
                 }
-                else
+
+                while (true)
                 {
-                    // Stuur berichtje
-                    string[] delen = input.Split(new char[] { ' ' }, 2);
-                    int poort = int.Parse(delen[0]);
-                    if (!Buren.ContainsKey(poort))
-                        Console.WriteLine("Hier is al verbinding naar!");
+                    string input = Console.ReadLine();
+                    if (input.StartsWith("verbind"))
+                    {
+                        int poort = int.Parse(input.Split()[1]);
+                        if (Buren.ContainsKey(poort))
+                            Console.WriteLine("Hier is al verbinding naar!");
+                        else
+                        {
+                            // Leg verbinding aan (als client)
+                            Buren.Add(poort, new Connection(poort));
+                        }
+                    }
                     else
-                        Buren[poort].Write.WriteLine(MijnPoort + ": " + delen[1]);
+                    {
+                        // Stuur berichtje
+                        string[] delen = input.Split(new char[] { ' ' }, 2);
+                        int poort = int.Parse(delen[0]);
+                        if (!Buren.ContainsKey(poort))
+                            Console.WriteLine("Hier is al verbinding naar!");
+                        else
+                            Buren[poort].Write.WriteLine(MijnPoort + ": " + delen[1]);
+                    }
                 }
             }
         }
     }
-}
+
