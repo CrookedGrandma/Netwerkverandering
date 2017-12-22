@@ -34,8 +34,7 @@ namespace MultiClientServer {
                         Console.Write("Er is al verbinding naar ");
                         Console.WriteLine(poort);
                     }
-                    else {
-                        // Leg verbinding aan (als client)
+                    else if (poort > MijnPoort) {
                         Buren.Add(poort, new Connection(poort));
                     }
                 }
@@ -65,6 +64,19 @@ namespace MultiClientServer {
                     else {
                         Buren[poort].Write.WriteLine(MijnPoort + ": " + delen[2]);
                     }
+                }
+                else if (input.StartsWith("D")) {
+                    string[] delen = input.Split(' ');
+                    int poort = int.Parse(delen[1]);
+                    if (Buren.ContainsKey(poort)) {
+                        Buren.Remove(poort);
+                        Console.Write("Verbinding met poort ");
+                        Console.Write(poort);
+                        Console.WriteLine(" gesloten");
+                    }
+                }
+                else if (input.StartsWith("R")) {
+
                 }
                 else {
                     Console.Write("Onbekende instructie: ");

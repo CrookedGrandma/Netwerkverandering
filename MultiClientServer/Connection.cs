@@ -15,6 +15,10 @@ namespace MultiClientServer {
         // Connection heeft 2 constructoren: deze constructor wordt gebruikt als wij CLIENT worden bij een andere SERVER
         public Connection(int port) {
             TcpClient client = new TcpClient("localhost", port);
+            while (!client.Connected) {
+                Thread.Sleep(10);
+                client.Connect("localhost", port);
+            }
             Read = new StreamReader(client.GetStream());
             Write = new StreamWriter(client.GetStream());
             Write.AutoFlush = true;
