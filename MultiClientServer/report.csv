@@ -5,7 +5,7 @@ std-Disconnect;0;0;0;1
 std-Berichten;0;0;0;1
 std-BerichtNaVerandering;0;0;0;0,5
 std-NetwerkPartitie;0;0;0;1
-Opstarten;0;2;0;4
+Opstarten;0;3;0;4
 Connect;0;0;0;1
 Disconnect;0;0;0;1
 Berichten;0;0;0;1
@@ -19,32 +19,22 @@ Let op: deze berekening is niet het definitieve cijfer. Dit is alleen maar een a
 ------------------------------------
 
 Testcase;Status;Tijd;Omschrijving
-Standaard;Incorrect;14,25;Opstarten netwerk
-Random;Incorrect;17,26;Opstarten netwerk
-2xStandaard;Incorrect;3,83;Opstarten netwerk
+Standaard;Error;16,27;Opstarten netwerk
+Random;Error;19,27;Opstarten netwerk
+2xStandaard;Error;4,05;Opstarten netwerk
+Lijn-netwerk;Error;2,24;Opstarten netwerk
 
 ------------------------------------
 
-1;Standaard;Incorrect;14,25;Opstarten netwerk
+1;Standaard;Error;16,27;Opstarten netwerk
 Test 1 - Standaard
 
-Fout bij opzetten netwerk - de routing-tabel is incorrect.
-Het programma ziet de verbinding van 55500 naar 55503 niet.
-Het programma ziet de verbinding van 55500 naar 55504 niet.
-Het programma ziet de verbinding van 55500 naar 55505 niet.
-Het programma ziet de verbinding van 55501 naar 55503 niet.
-Het programma ziet de verbinding van 55501 naar 55504 niet.
-Het programma ziet de verbinding van 55501 naar 55505 niet.
-Het programma ziet de verbinding van 55502 naar 55505 niet.
-Het programma ziet de verbinding van 55503 naar 55500 niet.
-Het programma ziet de verbinding van 55503 naar 55501 niet.
-Het programma ziet de verbinding van 55503 naar 55504 niet.
-Het programma ziet de verbinding van 55504 naar 55500 niet.
-Het programma ziet de verbinding van 55504 naar 55501 niet.
-Het programma ziet de verbinding van 55504 naar 55503 niet.
-Het programma ziet de verbinding van 55505 naar 55500 niet.
-Het programma ziet de verbinding van 55505 naar 55501 niet.
-Het programma ziet de verbinding van 55505 naar 55502 niet.
+Process 55501 gercasht met foutmelding:
+Onverwerkte uitzondering: System.InvalidOperationException: De verzameling is gewijzigd. Mogelijk wordt de inventarisatiebewerking niet uitgevoerd.
+   bij System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   bij System.Collections.Generic.List`1.Enumerator.MoveNextRare()
+   bij System.Collections.Generic.List`1.Enumerator.MoveNext()
+   bij MultiClientServer.Program.Main(String[] args) in C:\Users\benni\Desktop\Netwerkverandering\MultiClientServer\Program.cs:regel 86
 
 Log
 start MultiClientServer.exe 55500 55501 55502
@@ -72,178 +62,215 @@ start MultiClientServer.exe 55505 55503 55504
 55503 > R
 55504 > R
 55505 > R
-55502 < je shit:
-55502 < routingtable <<<actual routingtable>>>
-55502 < je shit:
-55504 < je shit:
-55501 < je shit:
-55502 < routingtable <<<actual routingtable>>>
-55504 < routingtable <<<actual routingtable>>>
-55501 < routingtable <<<actual routingtable>>>
-55500 < je shit:
-55500 < routingtable <<<actual routingtable>>>
-55501 < 55501 0 local
-55502 < 55502 0 local
-55504 < 55504 0 local
-55503 < 55503 0 local
-55503 < 55505 1 55505
-55504 < 55505 1 55505
-55502 < 55503 1 55503
-55503 < 55502 1 55502
-55501 < 55502 1 55502
+55505 < Test:
+55502 < Test:
+55505 < Test:
 55500 < 55500 0 local
-55504 < 55502 1 55502
-55502 < 55501 1 55501
-55503 < je shit:
-55501 < 55500 1 55500
+55504 < 55504 0 local
+55503 < Test:
+55502 < 55502 0 local
+55501 < Test:
 55500 < 55501 1 55501
-55502 < 55504 1 55504
-55505 < je shit:
-55504 < je shit:
-55503 < routingtable <<<actual routingtable>>>
-55505 < routingtable <<<actual routingtable>>>
-55504 < routingtable <<<actual routingtable>>>
-55503 < je shit:
-55502 < 55500 1 55500
+55502 < 55503 1 55503
 55500 < 55502 1 55502
-55501 < je shit:
-55505 < je shit:
-55503 < routingtable <<<actual routingtable>>>
-55501 < routingtable <<<actual routingtable>>>
-55505 < routingtable <<<actual routingtable>>>
-55500 < je shit:
-55502 < je shit:
-55500 < routingtable <<<actual routingtable>>>
-55502 < routingtable <<<actual routingtable>>>
-55502 < je shit:
-55502 < routingtable <<<actual routingtable>>>
+55501 < Test:
+55504 < 55505 1 55505
+55501 < 55501 0 local
+55502 < 55501 1 55501
+55500 < Test:
+55504 < 55502 1 55502
+55502 < 55504 1 55504
+55504 < Test:
+55502 < 55500 1 55500
+55504 < 55504 0 local
+55504 < 55505 1 55505
+55502 < Test:
+55500 < 55500 0 local
+55501 < 55502 1 55502
+55504 < 55502 1 55502
+55502 < 55502 0 local
+55504 < 55503 2 55502
+55501 < 55500 1 55500
+55502 < 55503 1 55503
+55500 < 55501 1 55501
+55503 < Test:
 55505 < 55505 0 local
+55504 < 55501 2 55502
+55501 < 55503 2 55502
+55500 < 55502 1 55502
+55502 < 55501 1 55501
+55504 < 55500 2 55502
 55505 < 55503 1 55503
+55501 < 55504 2 55502
+55500 < 55503 2 55502
+55502 < 55504 1 55504
+55501 < 55501 0 local
 55505 < 55504 1 55504
+55500 < 55504 2 55502
+55502 < 55500 1 55500
+55501 < 55502 1 55502
+55505 < 55502 2 55504
+55502 < 55505 2 55504
+55501 < 55500 1 55500
+55502 < 55502 0 local
+55505 < 55505 0 local
+55500 < Test:
+55501 < 55503 2 55502
+55503 < 55503 0 local
+55502 < 55503 1 55503
+55505 < 55503 1 55503
+55501 < 55504 2 55502
+55503 < 55505 1 55505
+55502 < 55501 1 55501
+55505 < 55504 1 55504
+55502 < 55504 1 55504
+55503 < 55502 1 55502
+55505 < 55502 2 55504
+55503 < 55504 2 55505
+55502 < 55500 1 55500
+55502 < 55505 2 55504
+55502 < Test:
+55502 < 55502 0 local
+55502 < 55503 1 55503
+55502 < 55501 1 55501
+55502 < 55504 1 55504
+55502 < 55500 1 55500
+55502 < 55505 2 55504
+55502 < Test:
+55502 < 55502 0 local
+55502 < 55503 1 55503
+55502 < 55501 1 55501
+55502 < 55504 1 55504
+55502 < 55500 1 55500
+55502 < 55505 2 55504
+55501 < Verbinding niet bestaand
+55501 < Kan geen gegevens lezen uit de transportverbinding: De externe host heeft een verbinding verbroken.
+55501 < Verbinding niet bestaand
+55501 < Kan geen gegevens lezen uit de transportverbinding: De externe host heeft een verbinding verbroken.
 
 Process 55500:
 Verbonden met poort 55500
 > R
-je shit:
-routingtable <<<actual routingtable>>>
 55500 0 local
 55501 1 55501
 55502 1 55502
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+55500 0 local
+55501 1 55501
+55502 1 55502
+55503 2 55502
+55504 2 55502
+Test:
 
 Process 55501:
 Verbonden met poort 55501
 Client maakt verbinding: 55500
 > R
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+Test:
 55501 0 local
 55502 1 55502
 55500 1 55500
-je shit:
-routingtable <<<actual routingtable>>>
+55503 2 55502
+55504 2 55502
+55501 0 local
+55502 1 55502
+55500 1 55500
+55503 2 55502
+55504 2 55502
+Verbinding niet bestaand
+Kan geen gegevens lezen uit de transportverbinding: De externe host heeft een verbinding verbroken.
+Verbinding niet bestaand
+Kan geen gegevens lezen uit de transportverbinding: De externe host heeft een verbinding verbroken.
 
 Process 55502:
 Verbonden met poort 55502
 Client maakt verbinding: 55501
 Client maakt verbinding: 55500
 > R
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
 55502 0 local
 55503 1 55503
 55501 1 55501
 55504 1 55504
 55500 1 55500
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+55502 0 local
+55503 1 55503
+55501 1 55501
+55504 1 55504
+55500 1 55500
+55505 2 55504
+55502 0 local
+55503 1 55503
+55501 1 55501
+55504 1 55504
+55500 1 55500
+55505 2 55504
+Test:
+55502 0 local
+55503 1 55503
+55501 1 55501
+55504 1 55504
+55500 1 55500
+55505 2 55504
+Test:
+55502 0 local
+55503 1 55503
+55501 1 55501
+55504 1 55504
+55500 1 55500
+55505 2 55504
 
 Process 55503:
 Verbonden met poort 55503
 Client maakt verbinding: 55502
 > R
+Test:
+Test:
 55503 0 local
 55505 1 55505
 55502 1 55502
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+55504 2 55505
 
 Process 55504:
 Verbonden met poort 55504
 Client maakt verbinding: 55502
 > R
-je shit:
-routingtable <<<actual routingtable>>>
 55504 0 local
 55505 1 55505
 55502 1 55502
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+55504 0 local
+55505 1 55505
+55502 1 55502
+55503 2 55502
+55501 2 55502
+55500 2 55502
 
 Process 55505:
 Verbonden met poort 55505
 Client maakt verbinding: 55503
 Client maakt verbinding: 55504
 > R
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+Test:
 55505 0 local
 55503 1 55503
 55504 1 55504
+55502 2 55504
+55505 0 local
+55503 1 55503
+55504 1 55504
+55502 2 55504
 
 ------------------------------------
 
-2;Random;Incorrect;17,26;Opstarten netwerk
+2;Random;Error;19,27;Opstarten netwerk
 Test 2 - Random
 
-Fout bij opzetten netwerk - de routing-tabel is incorrect.
-Het programma ziet de verbinding van 55500 naar 55504 niet.
-Het programma ziet de verbinding van 55500 naar 55505 niet.
-Het programma ziet de verbinding van 55500 naar 55508 niet.
-Het programma ziet de verbinding van 55501 naar 55503 niet.
-Het programma ziet de verbinding van 55501 naar 55507 niet.
-Het programma ziet de verbinding van 55501 naar 55508 niet.
-Het programma ziet de verbinding van 55502 naar 55503 niet.
-Het programma ziet de verbinding van 55502 naar 55505 niet.
-Het programma ziet de verbinding van 55502 naar 55506 niet.
-Het programma ziet de verbinding van 55502 naar 55507 niet.
-Het programma ziet de verbinding van 55502 naar 55508 niet.
-Het programma ziet de verbinding van 55503 naar 55501 niet.
-Het programma ziet de verbinding van 55503 naar 55502 niet.
-Het programma ziet de verbinding van 55503 naar 55507 niet.
-Het programma ziet de verbinding van 55504 naar 55500 niet.
-Het programma ziet de verbinding van 55504 naar 55505 niet.
-Het programma ziet de verbinding van 55504 naar 55507 niet.
-Het programma ziet de verbinding van 55504 naar 55508 niet.
-Het programma ziet de verbinding van 55505 naar 55500 niet.
-Het programma ziet de verbinding van 55505 naar 55502 niet.
-Het programma ziet de verbinding van 55505 naar 55504 niet.
-Het programma ziet de verbinding van 55505 naar 55507 niet.
-Het programma ziet de verbinding van 55505 naar 55508 niet.
-Het programma ziet de verbinding van 55506 naar 55502 niet.
-Het programma ziet de verbinding van 55506 naar 55508 niet.
-Het programma ziet de verbinding van 55507 naar 55501 niet.
-Het programma ziet de verbinding van 55507 naar 55502 niet.
-Het programma ziet de verbinding van 55507 naar 55503 niet.
-Het programma ziet de verbinding van 55507 naar 55504 niet.
-Het programma ziet de verbinding van 55507 naar 55505 niet.
-Het programma ziet de verbinding van 55507 naar 55508 niet.
-Het programma ziet de verbinding van 55508 naar 55500 niet.
-Het programma ziet de verbinding van 55508 naar 55501 niet.
-Het programma ziet de verbinding van 55508 naar 55502 niet.
-Het programma ziet de verbinding van 55508 naar 55504 niet.
-Het programma ziet de verbinding van 55508 naar 55505 niet.
-Het programma ziet de verbinding van 55508 naar 55506 niet.
-Het programma ziet de verbinding van 55508 naar 55507 niet.
+Process 55500 gercasht met foutmelding:
+Onverwerkte uitzondering:
 
 Log
 start MultiClientServer.exe 55500 55501 55502 55503 55506 55507
@@ -251,14 +278,14 @@ start MultiClientServer.exe 55501 55500 55502 55504 55505 55506
 start MultiClientServer.exe 55502 55500 55501 55504
 start MultiClientServer.exe 55503 55500 55504 55505 55506 55508
 55500 < Verbonden met poort 55500
-55501 < Verbonden met poort 55501
 start MultiClientServer.exe 55504 55501 55502 55503 55506
+55501 < Verbonden met poort 55501
 start MultiClientServer.exe 55505 55501 55503 55506
 start MultiClientServer.exe 55506 55500 55501 55503 55504 55505 55507
 55502 < Verbonden met poort 55502
 start MultiClientServer.exe 55507 55500 55506
-55503 < Verbonden met poort 55503
 start MultiClientServer.exe 55508 55503
+55503 < Verbonden met poort 55503
 55504 < Verbonden met poort 55504
 55505 < Verbonden met poort 55505
 55506 < Verbonden met poort 55506
@@ -277,8 +304,8 @@ start MultiClientServer.exe 55508 55503
 55503 < Client maakt verbinding: 55500
 55505 < Client maakt verbinding: 55501
 55506 < Client maakt verbinding: 55503
-55506 < Client maakt verbinding: 55501
 55506 < Client maakt verbinding: 55500
+55506 < Client maakt verbinding: 55501
 55508 < Client maakt verbinding: 55503
 55507 < Client maakt verbinding: 55500
 55500 > R
@@ -290,137 +317,319 @@ start MultiClientServer.exe 55508 55503
 55506 > R
 55507 > R
 55508 > R
+55507 < 55507 0 local
+55502 < 55502 0 local
+55505 < 55505 0 local
+55502 < 55504 1 55504
 55504 < 55504 0 local
+55502 < 55501 1 55501
+55507 < 55506 1 55506
+55505 < 55506 1 55506
+55506 < Test:
+55504 < 55506 1 55506
+55502 < 55500 1 55500
+55507 < 55500 1 55500
+55505 < 55503 1 55503
+55504 < 55502 1 55502
+55505 < 55501 1 55501
+55501 < 55501 0 local
+55500 < Test:
+55504 < 55503 1 55503
+55501 < 55502 1 55502
+55504 < 55501 1 55501
+55501 < 55500 1 55500
+55504 < Test:
+55503 < Test:
+55501 < 55504 1 55504
+55506 < 55506 0 local
+55500 < Test:
+55501 < 55505 1 55505
+55506 < 55507 1 55507
+55501 < 55506 1 55506
+55506 < 55504 1 55504
+55506 < 55505 1 55505
+55503 < 55503 0 local
+55502 < Test:
+55506 < 55503 1 55503
+55503 < 55504 1 55504
+55506 < 55500 1 55500
+55503 < 55505 1 55505
+55506 < 55501 1 55501
+55503 < 55506 1 55506
+55503 < 55500 1 55500
+55503 < 55508 1 55508
 55503 < 55503 0 local
 55503 < 55504 1 55504
 55503 < 55505 1 55505
+55502 < 55502 0 local
 55503 < 55506 1 55506
-55504 < 55506 1 55506
+55504 < Test:
+55502 < 55504 1 55504
 55503 < 55500 1 55500
-55502 < je shit:
+55502 < 55501 1 55501
 55500 < 55500 0 local
-55504 < 55502 1 55502
-55503 < 55508 1 55508
-55502 < routingtable <<<actual routingtable>>>
+55504 < Test:
+55502 < 55500 1 55500
 55500 < 55501 1 55501
+55502 < 55506 2 55504
+55501 < Test:
+55504 < 55504 0 local
+55500 < 55502 1 55502
+55502 < 55503 2 55504
+55504 < 55506 1 55506
+55501 < Test:
+55504 < 55502 1 55502
+55504 < 55503 1 55503
+55501 < 55501 0 local
+55504 < 55501 1 55501
+55505 < Test:
+55501 < 55502 1 55502
+55504 < 55507 2 55506
+55506 < Test:
+55505 < Test:
+55501 < 55500 1 55500
+55504 < 55505 2 55506
+55505 < 55505 0 local
+55506 < 55506 0 local
+55503 < 55508 1 55508
+55501 < 55504 1 55504
+55508 < Test:
+55504 < 55500 2 55506
+55500 < 55503 1 55503
+55505 < 55506 1 55506
+55506 < 55507 1 55507
+55501 < 55505 1 55505
+55503 < 55501 2 55505
+55504 < 55504 0 local
+55505 < 55503 1 55503
+55506 < 55504 1 55504
+55501 < 55506 1 55506
+55505 < 55501 1 55501
+55504 < 55506 1 55506
+55503 < Test:
+55500 < 55506 1 55506
+55506 < 55505 1 55505
+55503 < 55503 0 local
+55505 < 55502 2 55501
+55501 < 55503 2 55504
+55504 < 55502 1 55502
+55506 < 55503 1 55503
+55500 < 55507 1 55507
+55502 < Test:
+55507 < Test:
+55508 < 55508 0 local
+55501 < Test:
+55502 < 55502 0 local
+55501 < 55501 0 local
+55508 < 55503 1 55503
+55502 < 55504 1 55504
+55501 < 55502 1 55502
+55502 < 55501 1 55501
+55501 < 55500 1 55500
+55502 < 55500 1 55500
+55501 < 55504 1 55504
+55500 < 55504 2 55501
+55507 < 55507 0 local
+55502 < 55506 2 55504
+55501 < 55505 1 55505
+55507 < 55506 1 55506
+55502 < 55503 2 55504
+55507 < 55500 1 55500
+55501 < 55506 1 55506
+55500 < 55505 2 55501
+55502 < 55505 2 55501
+55501 < 55503 2 55504
+55507 < 55504 2 55506
+55501 < Test:
+55501 < 55501 0 local
+55507 < 55505 2 55506
+55501 < 55502 1 55502
+55507 < 55503 2 55506
+55507 < 55501 2 55506
+55501 < 55500 1 55500
+55501 < 55504 1 55504
+55501 < 55505 1 55505
+55501 < 55506 1 55506
+55501 < 55503 2 55504
+55501 < Test:
+55503 < 55504 1 55504
+55503 < 55505 1 55505
+55506 < 55500 1 55500
+55504 < 55503 1 55503
+55500 < Test:
+55503 < 55506 1 55506
+55500 < 55500 0 local
+55506 < 55501 1 55501
+55504 < 55501 1 55501
+55503 < 55500 1 55500
+55504 < 55507 2 55506
+55500 < 55501 1 55501
+55506 < 55508 2 55503
+55503 < 55508 1 55508
+55508 < 55508 0 local
+55505 < 55500 2 55501
+55504 < 55505 2 55506
+55500 < 55502 1 55502
+55506 < Test:
+55503 < 55501 2 55505
+55508 < 55503 1 55503
+55505 < 55504 2 55501
+55506 < 55506 0 local
+55504 < 55500 2 55506
+55500 < 55503 1 55503
+55503 < 55507 2 55506
+55508 < 55504 2 55503
+55505 < 55505 0 local
+55506 < 55507 1 55507
+55504 < 55504 0 local
+55500 < 55506 1 55506
+55508 < 55505 2 55503
+55505 < 55506 1 55506
+55503 < Test:
+55506 < 55504 1 55504
+55504 < 55506 1 55506
+55503 < 55503 0 local
+55500 < 55507 1 55507
+55508 < 55506 2 55503
+55505 < 55503 1 55503
+55506 < 55505 1 55505
+55504 < 55502 1 55502
+55503 < 55504 1 55504
+55508 < 55500 2 55503
+55505 < 55501 1 55501
+55500 < 55504 2 55501
+55506 < 55503 1 55503
+55504 < 55503 1 55503
+55503 < 55505 1 55505
+55505 < 55502 2 55501
+55500 < 55505 2 55501
+55506 < 55500 1 55500
+55504 < 55501 1 55501
+55503 < 55506 1 55506
+55505 < 55500 2 55501
+55500 < Test:
+55506 < 55501 1 55501
+55504 < 55507 2 55506
+55505 < 55504 2 55501
+55500 < 55500 0 local
+55503 < 55500 1 55500
+55506 < 55508 2 55503
+55504 < 55505 2 55506
+55505 < 55508 2 55503
+55500 < 55501 1 55501
+55503 < 55508 1 55508
+55506 < Test:
+55504 < 55500 2 55506
+55506 < 55506 0 local
+55500 < 55502 1 55502
+55505 < Test:
+55503 < 55501 2 55505
+55504 < Test:
+55505 < 55505 0 local
+55506 < 55507 1 55507
+55504 < 55504 0 local
+55500 < 55503 1 55503
+55503 < 55507 2 55506
+55505 < 55506 1 55506
+55506 < 55504 1 55504
+55504 < 55506 1 55506
+55500 < 55506 1 55506
+55503 < 55502 2 55504
+55505 < 55503 1 55503
+55506 < 55505 1 55505
+55504 < 55502 1 55502
+55500 < 55507 1 55507
+55503 < Test:
+55505 < 55501 1 55501
+55506 < 55503 1 55503
+55504 < 55503 1 55503
+55503 < 55503 0 local
+55505 < 55502 2 55501
+55500 < 55504 2 55501
+55506 < 55500 1 55500
+55504 < 55501 1 55501
+55503 < 55504 1 55504
+55505 < 55500 2 55501
+55500 < 55505 2 55501
+55506 < 55501 1 55501
+55504 < 55507 2 55506
+55503 < 55505 1 55505
+55505 < 55504 2 55501
+55500 < Test:
+55506 < 55508 2 55503
+55504 < 55505 2 55506
+55503 < 55506 1 55506
+55500 < 55500 0 local
+55505 < 55508 2 55503
+55506 < 55502 2 55504
+55504 < 55500 2 55506
+55503 < 55500 1 55500
+55500 < 55501 1 55501
+55505 < 55507 2 55506
+55506 < Test:
+55504 < 55508 2 55503
+55503 < 55508 1 55508
 55500 < 55502 1 55502
 55506 < 55506 0 local
-55505 < 55505 0 local
-55501 < 55501 0 local
+55503 < 55501 2 55505
 55500 < 55503 1 55503
-55502 < 55502 0 local
-55506 < je shit:
-55501 < 55502 1 55502
-55506 < routingtable <<<actual routingtable>>>
-55500 < 55506 1 55506
-55502 < 55504 1 55504
-55505 < 55506 1 55506
-55501 < 55504 1 55504
 55506 < 55507 1 55507
-55500 < 55507 1 55507
-55502 < 55501 1 55501
-55505 < 55503 1 55503
-55501 < 55500 1 55500
+55503 < 55507 2 55506
 55506 < 55504 1 55504
-55503 < je shit:
-55500 < je shit:
-55502 < 55500 1 55500
-55505 < 55501 1 55501
-55507 < je shit:
-55503 < routingtable <<<actual routingtable>>>
-55501 < 55505 1 55505
+55500 < 55506 1 55506
+55503 < 55502 2 55504
 55506 < 55505 1 55505
-55500 < routingtable <<<actual routingtable>>>
-55507 < routingtable <<<actual routingtable>>>
-55502 < je shit:
-55500 < je shit:
-55501 < 55506 1 55506
-55502 < routingtable <<<actual routingtable>>>
+55500 < 55507 1 55507
 55506 < 55503 1 55503
-55501 < je shit:
-55506 < 55501 1 55501
-55501 < routingtable <<<actual routingtable>>>
+55500 < 55504 2 55501
 55506 < 55500 1 55500
-55501 < je shit:
-55506 < je shit:
-55501 < routingtable <<<actual routingtable>>>
-55506 < routingtable <<<actual routingtable>>>
-55500 < routingtable <<<actual routingtable>>>
-55500 < je shit:
-55500 < routingtable <<<actual routingtable>>>
-55508 < 55508 0 local
-55508 < 55503 1 55503
-55501 < je shit:
-55502 < je shit:
-55501 < routingtable <<<actual routingtable>>>
-55503 < je shit:
-55501 < je shit:
-55502 < routingtable <<<actual routingtable>>>
-55503 < routingtable <<<actual routingtable>>>
-55501 < routingtable <<<actual routingtable>>>
-55506 < je shit:
-55507 < je shit:
-55506 < routingtable <<<actual routingtable>>>
-55507 < routingtable <<<actual routingtable>>>
-55503 < je shit:
-55503 < routingtable <<<actual routingtable>>>
-55507 < 55507 0 local
-55507 < 55506 1 55506
-55507 < 55500 1 55500
-55506 < je shit:
-55506 < routingtable <<<actual routingtable>>>
-55504 < je shit:
-55504 < je shit:
-55504 < routingtable <<<actual routingtable>>>
-55504 < routingtable <<<actual routingtable>>>
-55504 < 55503 1 55503
-55504 < 55501 1 55501
-55506 < je shit:
-55506 < routingtable <<<actual routingtable>>>
-55508 < je shit:
-55508 < routingtable <<<actual routingtable>>>
-55503 < je shit:
-55500 < je shit:
-55501 < je shit:
-55503 < routingtable <<<actual routingtable>>>
-55500 < routingtable <<<actual routingtable>>>
-55501 < routingtable <<<actual routingtable>>>
-55503 < je shit:
-55503 < routingtable <<<actual routingtable>>>
-55506 < je shit:
-55500 < je shit:
-55506 < routingtable <<<actual routingtable>>>
-55500 < routingtable <<<actual routingtable>>>
-55505 < je shit:
-55505 < je shit:
-55505 < je shit:
-55505 < routingtable <<<actual routingtable>>>
-55505 < routingtable <<<actual routingtable>>>
-55505 < routingtable <<<actual routingtable>>>
-55504 < je shit:
-55504 < routingtable <<<actual routingtable>>>
-55504 < je shit:
-55504 < routingtable <<<actual routingtable>>>
+55500 < 55505 2 55501
+55506 < 55501 1 55501
+55500 < 55508 2 55503
+55506 < 55508 2 55503
+55506 < 55502 2 55504
 
 Process 55500:
 Verbonden met poort 55500
 > R
+Test:
+Test:
 55500 0 local
 55501 1 55501
 55502 1 55502
 55503 1 55503
 55506 1 55506
 55507 1 55507
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+55504 2 55501
+55505 2 55501
+Test:
+55500 0 local
+55501 1 55501
+55502 1 55502
+55503 1 55503
+55506 1 55506
+55507 1 55507
+55504 2 55501
+55505 2 55501
+Test:
+55500 0 local
+55501 1 55501
+55502 1 55502
+55503 1 55503
+55506 1 55506
+55507 1 55507
+55504 2 55501
+55505 2 55501
+Test:
+55500 0 local
+55501 1 55501
+55502 1 55502
+55503 1 55503
+55506 1 55506
+55507 1 55507
+55504 2 55501
+55505 2 55501
+55508 2 55503
 
 Process 55501:
 Verbonden met poort 55501
@@ -428,57 +637,109 @@ Client maakt verbinding: 55500
 > R
 55501 0 local
 55502 1 55502
-55504 1 55504
 55500 1 55500
+55504 1 55504
 55505 1 55505
 55506 1 55506
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+Test:
+55501 0 local
+55502 1 55502
+55500 1 55500
+55504 1 55504
+55505 1 55505
+55506 1 55506
+55503 2 55504
+Test:
+55501 0 local
+55502 1 55502
+55500 1 55500
+55504 1 55504
+55505 1 55505
+55506 1 55506
+55503 2 55504
+Test:
+55501 0 local
+55502 1 55502
+55500 1 55500
+55504 1 55504
+55505 1 55505
+55506 1 55506
+55503 2 55504
+Test:
 
 Process 55502:
 Verbonden met poort 55502
 Client maakt verbinding: 55501
 Client maakt verbinding: 55500
 > R
-je shit:
-routingtable <<<actual routingtable>>>
 55502 0 local
 55504 1 55504
 55501 1 55501
 55500 1 55500
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+55502 0 local
+55504 1 55504
+55501 1 55501
+55500 1 55500
+55506 2 55504
+55503 2 55504
+Test:
+55502 0 local
+55504 1 55504
+55501 1 55501
+55500 1 55500
+55506 2 55504
+55503 2 55504
+55505 2 55501
 
 Process 55503:
 Verbonden met poort 55503
 Client maakt verbinding: 55500
 > R
+Test:
 55503 0 local
 55504 1 55504
 55505 1 55505
 55506 1 55506
 55500 1 55500
 55508 1 55508
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+55503 0 local
+55504 1 55504
+55505 1 55505
+55506 1 55506
+55500 1 55500
+55508 1 55508
+55501 2 55505
+Test:
+55503 0 local
+55504 1 55504
+55505 1 55505
+55506 1 55506
+55500 1 55500
+55508 1 55508
+55501 2 55505
+55507 2 55506
+Test:
+55503 0 local
+55504 1 55504
+55505 1 55505
+55506 1 55506
+55500 1 55500
+55508 1 55508
+55501 2 55505
+55507 2 55506
+55502 2 55504
+Test:
+55503 0 local
+55504 1 55504
+55505 1 55505
+55506 1 55506
+55500 1 55500
+55508 1 55508
+55501 2 55505
+55507 2 55506
+55502 2 55504
 
 Process 55504:
 Verbonden met poort 55504
@@ -489,16 +750,45 @@ Client maakt verbinding: 55501
 55504 0 local
 55506 1 55506
 55502 1 55502
-je shit:
-je shit:
-routingtable <<<actual routingtable>>>
-routingtable <<<actual routingtable>>>
 55503 1 55503
 55501 1 55501
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+Test:
+Test:
+Test:
+55504 0 local
+55506 1 55506
+55502 1 55502
+55503 1 55503
+55501 1 55501
+55507 2 55506
+55505 2 55506
+55500 2 55506
+55504 0 local
+55506 1 55506
+55502 1 55502
+55503 1 55503
+55501 1 55501
+55507 2 55506
+55505 2 55506
+55500 2 55506
+55504 0 local
+55506 1 55506
+55502 1 55502
+55503 1 55503
+55501 1 55501
+55507 2 55506
+55505 2 55506
+55500 2 55506
+Test:
+55504 0 local
+55506 1 55506
+55502 1 55502
+55503 1 55503
+55501 1 55501
+55507 2 55506
+55505 2 55506
+55500 2 55506
+55508 2 55503
 
 Process 55505:
 Verbonden met poort 55505
@@ -509,129 +799,133 @@ Client maakt verbinding: 55501
 55506 1 55506
 55503 1 55503
 55501 1 55501
-je shit:
-je shit:
-je shit:
-routingtable <<<actual routingtable>>>
-routingtable <<<actual routingtable>>>
-routingtable <<<actual routingtable>>>
+Test:
+Test:
+55505 0 local
+55506 1 55506
+55503 1 55503
+55501 1 55501
+55502 2 55501
+55500 2 55501
+55504 2 55501
+55505 0 local
+55506 1 55506
+55503 1 55503
+55501 1 55501
+55502 2 55501
+55500 2 55501
+55504 2 55501
+55508 2 55503
+Test:
+55505 0 local
+55506 1 55506
+55503 1 55503
+55501 1 55501
+55502 2 55501
+55500 2 55501
+55504 2 55501
+55508 2 55503
+55507 2 55506
 
 Process 55506:
 Verbonden met poort 55506
 Client maakt verbinding: 55504
 Client maakt verbinding: 55505
 Client maakt verbinding: 55503
-Client maakt verbinding: 55501
 Client maakt verbinding: 55500
+Client maakt verbinding: 55501
 > R
+Test:
 55506 0 local
-je shit:
-routingtable <<<actual routingtable>>>
 55507 1 55507
 55504 1 55504
 55505 1 55505
 55503 1 55503
-55501 1 55501
 55500 1 55500
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
+55501 1 55501
+Test:
+55506 0 local
+55507 1 55507
+55504 1 55504
+55505 1 55505
+55503 1 55503
+55500 1 55500
+55501 1 55501
+55508 2 55503
+Test:
+55506 0 local
+55507 1 55507
+55504 1 55504
+55505 1 55505
+55503 1 55503
+55500 1 55500
+55501 1 55501
+55508 2 55503
+Test:
+55506 0 local
+55507 1 55507
+55504 1 55504
+55505 1 55505
+55503 1 55503
+55500 1 55500
+55501 1 55501
+55508 2 55503
+55502 2 55504
+Test:
+55506 0 local
+55507 1 55507
+55504 1 55504
+55505 1 55505
+55503 1 55503
+55500 1 55500
+55501 1 55501
+55508 2 55503
+55502 2 55504
 
 Process 55507:
 Verbonden met poort 55507
 Client maakt verbinding: 55506
 Client maakt verbinding: 55500
 > R
-je shit:
-routingtable <<<actual routingtable>>>
-je shit:
-routingtable <<<actual routingtable>>>
 55507 0 local
 55506 1 55506
 55500 1 55500
+Test:
+55507 0 local
+55506 1 55506
+55500 1 55500
+55504 2 55506
+55505 2 55506
+55503 2 55506
+55501 2 55506
 
 Process 55508:
 Verbonden met poort 55508
 Client maakt verbinding: 55503
 > R
+Test:
 55508 0 local
 55503 1 55503
-je shit:
-routingtable <<<actual routingtable>>>
+55508 0 local
+55503 1 55503
+55504 2 55503
+55505 2 55503
+55506 2 55503
+55500 2 55503
 
 ------------------------------------
 
-3;2xStandaard;Incorrect;3,83;Opstarten netwerk
+3;2xStandaard;Error;4,05;Opstarten netwerk
 Test 3 - 2xStandaard
 
-Fout bij opzetten netwerk - de routing-tabel is incorrect.
-Het programma ziet de verbinding van 55500 naar 55501 niet.
-Het programma ziet de verbinding van 55500 naar 55502 niet.
-Het programma ziet de verbinding van 55500 naar 55503 niet.
-Het programma ziet de verbinding van 55500 naar 55504 niet.
-Het programma ziet de verbinding van 55500 naar 55505 niet.
-Het programma ziet de verbinding van 55501 naar 55500 niet.
-Het programma ziet de verbinding van 55501 naar 55502 niet.
-Het programma ziet de verbinding van 55501 naar 55503 niet.
-Het programma ziet de verbinding van 55501 naar 55504 niet.
-Het programma ziet de verbinding van 55501 naar 55505 niet.
-Het programma ziet de verbinding van 55502 naar 55500 niet.
-Het programma ziet de verbinding van 55502 naar 55501 niet.
-Het programma ziet de verbinding van 55502 naar 55503 niet.
-Het programma ziet de verbinding van 55502 naar 55504 niet.
-Het programma ziet de verbinding van 55502 naar 55505 niet.
-Het programma ziet de verbinding van 55503 naar 55500 niet.
-Het programma ziet de verbinding van 55503 naar 55501 niet.
-Het programma ziet de verbinding van 55503 naar 55502 niet.
-Het programma ziet de verbinding van 55503 naar 55504 niet.
-Het programma ziet de verbinding van 55503 naar 55505 niet.
-Het programma ziet de verbinding van 55504 naar 55500 niet.
-Het programma ziet de verbinding van 55504 naar 55501 niet.
-Het programma ziet de verbinding van 55504 naar 55502 niet.
-Het programma ziet de verbinding van 55504 naar 55503 niet.
-Het programma ziet de verbinding van 55504 naar 55505 niet.
-Het programma ziet de verbinding van 55505 naar 55500 niet.
-Het programma ziet de verbinding van 55505 naar 55501 niet.
-Het programma ziet de verbinding van 55505 naar 55502 niet.
-Het programma ziet de verbinding van 55505 naar 55503 niet.
-Het programma ziet de verbinding van 55505 naar 55504 niet.
-Het programma ziet de verbinding van 55506 naar 55507 niet.
-Het programma ziet de verbinding van 55506 naar 55508 niet.
-Het programma ziet de verbinding van 55506 naar 55509 niet.
-Het programma ziet de verbinding van 55506 naar 55510 niet.
-Het programma ziet de verbinding van 55506 naar 55511 niet.
-Het programma ziet de verbinding van 55507 naar 55506 niet.
-Het programma ziet de verbinding van 55507 naar 55508 niet.
-Het programma ziet de verbinding van 55507 naar 55509 niet.
-Het programma ziet de verbinding van 55507 naar 55510 niet.
-Het programma ziet de verbinding van 55507 naar 55511 niet.
-Het programma ziet de verbinding van 55508 naar 55506 niet.
-Het programma ziet de verbinding van 55508 naar 55507 niet.
-Het programma ziet de verbinding van 55508 naar 55509 niet.
-Het programma ziet de verbinding van 55508 naar 55510 niet.
-Het programma ziet de verbinding van 55508 naar 55511 niet.
-Het programma ziet de verbinding van 55509 naar 55506 niet.
-Het programma ziet de verbinding van 55509 naar 55507 niet.
-Het programma ziet de verbinding van 55509 naar 55508 niet.
-Het programma ziet de verbinding van 55509 naar 55510 niet.
-Het programma ziet de verbinding van 55509 naar 55511 niet.
-Het programma ziet de verbinding van 55510 naar 55506 niet.
-Het programma ziet de verbinding van 55510 naar 55507 niet.
-Het programma ziet de verbinding van 55510 naar 55508 niet.
-Het programma ziet de verbinding van 55510 naar 55509 niet.
-Het programma ziet de verbinding van 55510 naar 55511 niet.
-Het programma ziet de verbinding van 55511 naar 55506 niet.
-Het programma ziet de verbinding van 55511 naar 55507 niet.
-Het programma ziet de verbinding van 55511 naar 55508 niet.
-Het programma ziet de verbinding van 55511 naar 55509 niet.
-Het programma ziet de verbinding van 55511 naar 55510 niet.
+Process 55511 gercasht met foutmelding:
+Onverwerkte uitzondering: System.Net.Sockets.SocketException: Elk socketadres (protocol/netwerkadres/poort) kan normaal slechts ‚‚n keer worden gebruikt
+   bij System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   bij System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   bij System.Net.Sockets.TcpListener.Start(Int32 backlog)
+   bij System.Net.Sockets.TcpListener.Start()
+   bij MultiClientServer.Server..ctor(Int32 port) in C:\Users\benni\Desktop\Netwerkverandering\MultiClientServer\Server.cs:regel 15
+   bij MultiClientServer.Program.Main(String[] args) in C:\Users\benni\Desktop\Netwerkverandering\MultiClientServer\Program.cs:regel 20
 
 Log
 start MultiClientServer.exe 55500 55501 55502
@@ -642,22 +936,21 @@ start MultiClientServer.exe 55504 55502 55505
 55500 < Verbonden met poort 55500
 start MultiClientServer.exe 55505 55503 55504
 55501 < Verbonden met poort 55501
-55502 < Verbonden met poort 55502
 start MultiClientServer.exe 55506 55507 55508
-55503 < Verbonden met poort 55503
+55502 < Verbonden met poort 55502
 start MultiClientServer.exe 55507 55506 55508
+55503 < Verbonden met poort 55503
 start MultiClientServer.exe 55508 55506 55507 55509 55510
 55504 < Verbonden met poort 55504
 start MultiClientServer.exe 55509 55508 55511
 55505 < Verbonden met poort 55505
 start MultiClientServer.exe 55510 55508 55511
 55506 < Verbonden met poort 55506
-55507 < Verbonden met poort 55507
 start MultiClientServer.exe 55511 55509 55510
+55507 < Verbonden met poort 55507
 55508 < Verbonden met poort 55508
 55509 < Verbonden met poort 55509
 55510 < Verbonden met poort 55510
-55511 < Verbonden met poort 55511
 55501 < Client maakt verbinding: 55500
 55502 < Client maakt verbinding: 55501
 55503 < Client maakt verbinding: 55502
@@ -666,78 +959,126 @@ start MultiClientServer.exe 55511 55509 55510
 55507 < Client maakt verbinding: 55506
 55508 < Client maakt verbinding: 55507
 55509 < Client maakt verbinding: 55508
-55511 < Client maakt verbinding: 55510
-55511 < Client maakt verbinding: 55509
-55500 > R
-55501 > R
-55502 > R
-55503 > R
-55504 > R
-55505 > R
-55506 > R
-55507 > R
-55508 > R
-55509 > R
-55510 > R
-55511 > R
 
 Process 55500:
 Verbonden met poort 55500
-> R
 
 Process 55501:
 Verbonden met poort 55501
 Client maakt verbinding: 55500
-> R
 
 Process 55502:
 Verbonden met poort 55502
 Client maakt verbinding: 55501
-> R
 
 Process 55503:
 Verbonden met poort 55503
 Client maakt verbinding: 55502
-> R
 
 Process 55504:
 Verbonden met poort 55504
-> R
 
 Process 55505:
 Verbonden met poort 55505
 Client maakt verbinding: 55503
 Client maakt verbinding: 55504
-> R
 
 Process 55506:
 Verbonden met poort 55506
-> R
 
 Process 55507:
 Verbonden met poort 55507
 Client maakt verbinding: 55506
-> R
 
 Process 55508:
 Verbonden met poort 55508
 Client maakt verbinding: 55507
-> R
 
 Process 55509:
 Verbonden met poort 55509
 Client maakt verbinding: 55508
-> R
 
 Process 55510:
 Verbonden met poort 55510
-> R
 
-Process 55511:
-Verbonden met poort 55511
-Client maakt verbinding: 55510
-Client maakt verbinding: 55509
-> R
+------------------------------------
+
+4;Lijn-netwerk;Error;2,24;Opstarten netwerk
+Test 4 - Lijn-netwerk
+
+Process 55511 gercasht met foutmelding:
+Onverwerkte uitzondering: System.Net.Sockets.SocketException: Elk socketadres (protocol/netwerkadres/poort) kan normaal slechts ‚‚n keer worden gebruikt
+   bij System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   bij System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   bij System.Net.Sockets.TcpListener.Start(Int32 backlog)
+   bij System.Net.Sockets.TcpListener.Start()
+   bij MultiClientServer.Server..ctor(Int32 port) in C:\Users\benni\Desktop\Netwerkverandering\MultiClientServer\Server.cs:regel 15
+   bij MultiClientServer.Program.Main(String[] args) in C:\Users\benni\Desktop\Netwerkverandering\MultiClientServer\Program.cs:regel 20
+
+Log
+start MultiClientServer.exe 55500 55501
+start MultiClientServer.exe 55501 55500 55502
+start MultiClientServer.exe 55502 55501 55503
+start MultiClientServer.exe 55503 55502 55504
+start MultiClientServer.exe 55504 55503 55505
+55500 < Verbonden met poort 55500
+start MultiClientServer.exe 55505 55504 55506
+55501 < Verbonden met poort 55501
+start MultiClientServer.exe 55506 55505 55507
+55502 < Verbonden met poort 55502
+start MultiClientServer.exe 55507 55506 55508
+55503 < Verbonden met poort 55503
+start MultiClientServer.exe 55508 55507 55509
+55504 < Verbonden met poort 55504
+55505 < Verbonden met poort 55505
+start MultiClientServer.exe 55509 55508 55510
+55506 < Verbonden met poort 55506
+start MultiClientServer.exe 55510 55509 55511
+55507 < Verbonden met poort 55507
+start MultiClientServer.exe 55511 55510 55512
+start MultiClientServer.exe 55512 55511 55513
+55508 < Verbonden met poort 55508
+start MultiClientServer.exe 55513 55512 55514
+55509 < Verbonden met poort 55509
+start MultiClientServer.exe 55514 55513
+55510 < Verbonden met poort 55510
+55512 < Verbonden met poort 55512
+
+Process 55500:
+Verbonden met poort 55500
+
+Process 55501:
+Verbonden met poort 55501
+
+Process 55502:
+Verbonden met poort 55502
+
+Process 55503:
+Verbonden met poort 55503
+
+Process 55504:
+Verbonden met poort 55504
+
+Process 55505:
+Verbonden met poort 55505
+
+Process 55506:
+Verbonden met poort 55506
+
+Process 55507:
+Verbonden met poort 55507
+
+Process 55508:
+Verbonden met poort 55508
+
+Process 55509:
+Verbonden met poort 55509
+
+Process 55510:
+Verbonden met poort 55510
+
+Process 55512:
+Verbonden met poort 55512
 
 Microsoft Windows NT 6.2.9200.0 (x64)
 .NET version: 4.0.30319.42000
