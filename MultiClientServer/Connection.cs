@@ -13,6 +13,7 @@ namespace MultiClientServer {
         public StreamWriter Write;
         private List<RTElem> lastTable;
         private bool errorfound = false;
+        bool locked = false;
 
         // Connection heeft 2 constructoren: deze constructor wordt gebruikt als wij CLIENT worden bij een andere SERVER
         public Connection(int port) {
@@ -49,12 +50,14 @@ namespace MultiClientServer {
             if (!errorfound) {
                 try {
                     while (true) {
+                        while (locked) { }
+                        locked = true;
                         string input = Read.ReadLine();
                         bool changed = false;
 
                         // Als er gevraagd voor een routingtable berekening
                         if (input.StartsWith("routingtable")) {
-                            Console.WriteLine("Recomputing routing table...");
+                            Console.WriteLine("//Recomputing routing table...");
                             string van = input.Split(' ')[1];
                             string newInput = Read.ReadLine();
                             while (newInput != "done") {
@@ -69,6 +72,7 @@ namespace MultiClientServer {
                                             if (temp.dist + 1 < elem.dist) {
                                                 Program.routingTable.Remove(elem);
                                                 Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                                Console.WriteLine("Afstand naar " + temp.port + " is nu " + temp.dist + " via " + van);
                                                 changed = true;
                                                 goto restart;
                                             }
@@ -99,21 +103,24 @@ namespace MultiClientServer {
                         else {
                             Console.WriteLine(input);
                         }
+
+                        locked = false;
                     }
                 }
                 catch (IOException e) {
                     errorfound = true;
-                    Console.WriteLine("Verbinding niet bestaand");
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Onbereikbaar: " + Program.MijnPoort);
+                    //Console.WriteLine("Verbinding niet bestaand");
+                    //Console.WriteLine(e.Message);
                 }
                 catch (FormatException e) {
                     errorfound = true;
-                    Console.WriteLine("Onjuist format");
+                    Console.WriteLine("//Onjuist format");
                     Console.WriteLine(e.Message);
                 }
                 catch (Exception e) {
                     errorfound = true;
-                    Console.WriteLine("Overige error");
+                    Console.WriteLine("//Overige error");
                     Console.WriteLine(e.ToString());
                 }
             }

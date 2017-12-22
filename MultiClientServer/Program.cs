@@ -24,7 +24,7 @@ namespace MultiClientServer {
             //Console.WriteLine("Typ [verbind poortnummer] om verbinding te maken, bijvoorbeeld: verbind 1100");
             //Console.WriteLine("Typ [poortnummer bericht] om een bericht te sturen, bijvoorbeeld: 1100 hoi hoi");
 
-            Console.Write("Verbonden met poort ");
+            Console.Write("//Verbonden met poort ");
             Console.WriteLine(MijnPoort);
 
             routingTable.Add(new RTElem(MijnPoort, 0, "local"));
@@ -35,7 +35,7 @@ namespace MultiClientServer {
                 int poort = int.Parse(args[i]);
                 lock (thislock) {
                     if (Buren.ContainsKey(poort)) {
-                        Console.Write("Er is al verbinding naar ");
+                        Console.Write("//Er is al verbinding naar ");
                         Console.WriteLine(poort);
                     }
                     else if (poort > MijnPoort) {
@@ -56,14 +56,16 @@ namespace MultiClientServer {
             while (true) {
                 string input = Console.ReadLine();
                 if (input.StartsWith("C")) {
-                    int poort = int.Parse(input.Split()[1]);
+                    string poortStr = input.Split()[1];
+                    int poort = int.Parse(poortStr);
                     if (Buren.ContainsKey(poort)) {
-                        Console.Write("Er is al verbinding naar ");
+                        Console.Write("//Er is al verbinding naar ");
                         Console.WriteLine(poort);
                     }
                     else {
                         // Leg verbinding aan (als client)
                         Buren.Add(poort, new Connection(poort));
+                        Console.WriteLine("Verbonden: " + poortStr);
                     }
                 }
                 else if (input.StartsWith("B")) {
@@ -71,8 +73,7 @@ namespace MultiClientServer {
                     string[] delen = input.Split(new char[] { ' ' }, 3);
                     int poort = int.Parse(delen[1]);
                     if (!Buren.ContainsKey(poort)) {
-                        Console.Write("Er is geen verbinding naar ");
-                        Console.WriteLine(poort);
+                        Console.WriteLine("Poort " + delen[1] + " is niet bekend");
                     }
                     else {
                         Buren[poort].Write.WriteLine(MijnPoort + ": " + delen[2]);
@@ -84,9 +85,10 @@ namespace MultiClientServer {
                     int poort = int.Parse(delen[1]);
                     if (Buren.ContainsKey(poort)) {
                         Buren.Remove(poort);
-                        Console.Write("Verbinding met poort ");
-                        Console.Write(poort);
-                        Console.WriteLine(" gesloten");
+                        Console.WriteLine("Verbroken: " + delen[1]);
+                    }
+                    else {
+                        Console.WriteLine("Poort " + delen[1] + " is niet bekend");
                     }
                 }
                 else if (input.StartsWith("R")) {
@@ -96,7 +98,7 @@ namespace MultiClientServer {
                     }
                 }
                 else {
-                    Console.Write("Onbekende instructie: ");
+                    Console.Write("//Onbekende instructie: ");
                     Console.WriteLine(input.Split(' ')[0]);
                 }
             }
