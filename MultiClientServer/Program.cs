@@ -5,16 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace MultiClientServer
-{
-    class Program
-    {
+namespace MultiClientServer {
+    class Program {
         static public int MijnPoort;
         static public object thislock = new object();
         static public Dictionary<int, Connection> Buren = new Dictionary<int, Connection>();
 
-        static void Main(string[] args)
-        {
+        static void Main(string[] args) {
 
             //Console.Write("Op welke poort ben ik server? ");
             //MijnPoort = int.Parse(Console.ReadLine());
@@ -28,28 +25,23 @@ namespace MultiClientServer
 
             Console.Write("Verbonden met poort ");
             Console.WriteLine(MijnPoort);
-            for (int i = 1; i < args.Length; i++)
-            {
+            for (int i = 1; i < args.Length; i++) {
                 if (args[i].StartsWith("//")) break;
 
                 int poort = int.Parse(args[i]);
-                lock (thislock)
-                {
+                lock (thislock) {
                     if (Buren.ContainsKey(poort))
                         Console.WriteLine("Hier is al verbinding naar!");
-                    else
-                    {
+                    else {
                         // Leg verbinding aan (als client)
                         Buren.Add(poort, new Connection(poort));
                     }
                 }
             }
 
-            while (true)
-            {
+            while (true) {
                 string input = Console.ReadLine();
-                if (input.StartsWith("C"))
-                {
+                if (input.StartsWith("C")) {
                     int poort = int.Parse(input.Split()[1]);
                     if (Buren.ContainsKey(poort)) {
                         Console.Write("Er is al verbinding naar ");
@@ -60,8 +52,7 @@ namespace MultiClientServer
                         Buren.Add(poort, new Connection(poort));
                     }
                 }
-                else if (input.StartsWith("B"))
-                {
+                else if (input.StartsWith("B")) {
                     // Stuur berichtje
                     string[] delen = input.Split(new char[] { ' ' }, 3);
                     int poort = int.Parse(delen[1]);

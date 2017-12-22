@@ -7,12 +7,9 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 
-namespace MultiClientServer
-{
-    class Server
-    {
-        public Server(int port)
-        {
+namespace MultiClientServer {
+    class Server {
+        public Server(int port) {
             // Luister op de opgegeven poort naar verbindingen
             TcpListener server = new TcpListener(IPAddress.Any, port);
             server.Start();
@@ -23,10 +20,8 @@ namespace MultiClientServer
             Console.Title = port.ToString();
         }
 
-        private void AcceptLoop(TcpListener handle)
-        {
-            while (true)
-            {
+        private void AcceptLoop(TcpListener handle) {
+            while (true) {
                 TcpClient client = handle.AcceptTcpClient();
                 StreamReader clientIn = new StreamReader(client.GetStream());
                 StreamWriter clientOut = new StreamWriter(client.GetStream());
@@ -38,10 +33,8 @@ namespace MultiClientServer
                 Console.WriteLine("Client maakt verbinding: " + zijnPoort);
 
                 // Zet de nieuwe verbinding in de verbindingslijst
-                lock (Program.thislock)
-                {
-                    if (!Program.Buren.ContainsKey(zijnPoort))
-                    {
+                lock (Program.thislock) {
+                    if (!Program.Buren.ContainsKey(zijnPoort)) {
                         Program.Buren.Add(zijnPoort, new Connection(clientIn, clientOut));
                     }
                 }
