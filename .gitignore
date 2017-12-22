@@ -51,6 +51,7 @@ project.fragment.lock.json
 artifacts/
 **/Properties/launchSettings.json
 
+*.csv
 *_i.c
 *_p.c
 *_i.h
@@ -297,4 +298,8 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+<<<<<<< HEAD
 MultiClientServer/report.csv
+=======
+*.csv
+>>>>>>> origin/master
