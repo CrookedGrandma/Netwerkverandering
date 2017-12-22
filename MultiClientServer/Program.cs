@@ -45,13 +45,7 @@ namespace MultiClientServer {
                 }
             }
 
-            foreach (Connection c in Buren.Values) {
-                c.Write.WriteLine("routingtable " + MijnPoort);
-                foreach (RTElem elem in routingTable) {
-                    c.Write.WriteLine(elem.ToString());
-                }
-                c.Write.WriteLine("done");
-            }
+            Recompute();
 
             while (true) {
                 string input = Console.ReadLine();
@@ -65,6 +59,7 @@ namespace MultiClientServer {
                     else {
                         // Leg verbinding aan (als client)
                         Buren.Add(poort, new Connection(poort));
+                        Recompute();
                         Console.WriteLine("Verbonden: " + poortStr);
                     }
                 }
@@ -72,11 +67,16 @@ namespace MultiClientServer {
                     // Stuur berichtje
                     string[] delen = input.Split(new char[] { ' ' }, 3);
                     int poort = int.Parse(delen[1]);
-                    if (!Buren.ContainsKey(poort)) {
-                        Console.WriteLine("Poort " + delen[1] + " is niet bekend");
+                    bool found = false;
+                    foreach (RTElem elem in routingTable) {
+                        if (elem.port == poort) {
+                            Buren[int.Parse(elem.viaPort)].Write.WriteLine("message " + delen[1] + " " + delen[2]);
+                            found = true;
+                            break;
+                        }
                     }
-                    else {
-                        Buren[poort].Write.WriteLine(MijnPoort + ": " + delen[2]);
+                    if (!found) {
+                        Console.WriteLine("Poort " + delen[1] + " is niet bekend");
                     }
                 }
                 else if (input.StartsWith("D")) {
@@ -101,6 +101,16 @@ namespace MultiClientServer {
                     Console.Write("//Onbekende instructie: ");
                     Console.WriteLine(input.Split(' ')[0]);
                 }
+            }
+        }
+
+        public static void Recompute() {
+            foreach (Connection c in Buren.Values) {
+                c.Write.WriteLine("routingtable " + MijnPoort);
+                foreach (RTElem elem in routingTable) {
+                    c.Write.WriteLine(elem.ToString());
+                }
+                c.Write.WriteLine("done");
             }
         }
     }

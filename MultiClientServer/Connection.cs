@@ -100,8 +100,21 @@ namespace MultiClientServer {
                         }
 
                         // Als er een bericht gestuurd wordt
-                        else {
-                            Console.WriteLine(input);
+                        else if (input.StartsWith("message")) {
+                            string[] delen = input.Split(new char[] { ' ' }, 3);
+                            int port = int.Parse(delen[1]);
+                            string bericht = delen[2];
+                            if (port == Program.MijnPoort) {
+                                Console.WriteLine(bericht);
+                            }
+                            else {
+                                foreach (RTElem elem in Program.routingTable) {
+                                    if (elem.port == port) {
+                                        Program.Buren[int.Parse(elem.viaPort)].Write.WriteLine(input);
+                                        break;
+                                    }
+                                }
+                            }
                         }
 
                         locked = false;
