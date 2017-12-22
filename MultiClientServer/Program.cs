@@ -45,7 +45,7 @@ namespace MultiClientServer {
                 }
             }
 
-            Recompute();
+            //Recompute();
 
             while (true) {
                 string input = Console.ReadLine();
@@ -60,6 +60,7 @@ namespace MultiClientServer {
                         // Leg verbinding aan (als client)
                         Buren.Add(poort, new Connection(poort));
                         Recompute();
+                        //Thread.Sleep(25);
                         Console.WriteLine("Verbonden: " + poortStr);
                     }
                 }
@@ -85,6 +86,8 @@ namespace MultiClientServer {
                     int poort = int.Parse(delen[1]);
                     if (Buren.ContainsKey(poort)) {
                         Buren.Remove(poort);
+                        Recompute();
+                        //Thread.Sleep(25);
                         Console.WriteLine("Verbroken: " + delen[1]);
                     }
                     else {

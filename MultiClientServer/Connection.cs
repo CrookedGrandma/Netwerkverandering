@@ -13,11 +13,16 @@ namespace MultiClientServer {
         public StreamWriter Write;
         private List<RTElem> lastTable;
         private bool errorfound = false;
-        bool locked = false;
 
         // Connection heeft 2 constructoren: deze constructor wordt gebruikt als wij CLIENT worden bij een andere SERVER
         public Connection(int port) {
-            TcpClient client = new TcpClient("localhost", port);
+            TcpClient client;
+            connect:
+            try { client = new TcpClient("localhost", port); }
+            catch {
+                Thread.Sleep(10);
+                goto connect;
+            }
             while (!client.Connected) {
                 Thread.Sleep(10);
                 client.Connect("localhost", port);
@@ -50,15 +55,13 @@ namespace MultiClientServer {
             if (!errorfound) {
                 try {
                     while (true) {
-                        while (locked) { }
-                        locked = true;
                         string input = Read.ReadLine();
-                        bool changed = false;
 
                         // Als er gevraagd voor een routingtable berekening
                         if (input.StartsWith("routingtable")) {
                             Console.WriteLine("//Recomputing routing table...");
                             string van = input.Split(' ')[1];
+                            bool changed = false;
                             string newInput = Read.ReadLine();
                             while (newInput != "done") {
                                 RTElem temp = RTElem.FromString(newInput);
@@ -116,8 +119,6 @@ namespace MultiClientServer {
                                 }
                             }
                         }
-
-                        locked = false;
                     }
                 }
                 catch (IOException e) {
