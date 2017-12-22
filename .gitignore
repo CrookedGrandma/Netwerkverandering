@@ -298,8 +298,5 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-<<<<<<< HEAD
 MultiClientServer/report.csv
-=======
 *.csv
->>>>>>> origin/master
