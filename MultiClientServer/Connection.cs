@@ -108,13 +108,16 @@ namespace MultiClientServer {
                             string[] delen = input.Split(new char[] { ' ' }, 3);
                             int port = int.Parse(delen[1]);
                             string bericht = delen[2];
+                            // Bericht voor dit proces
                             if (port == Program.MijnPoort) {
                                 Console.WriteLine(bericht);
                             }
+                            // Bericht voor ander proces
                             else {
                                 foreach (RTElem elem in Program.routingTable) {
                                     if (elem.port == port) {
                                         Program.Buren[int.Parse(elem.viaPort)].Write.WriteLine(input);
+                                        Console.WriteLine("Bericht voor " + port + " doorgestuurd naar " + elem.viaPort);
                                         break;
                                     }
                                 }
