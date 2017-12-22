@@ -45,7 +45,7 @@ namespace MultiClientServer {
                 }
             }
 
-            //Recompute();
+            Recompute();
 
             while (true) {
                 string input = Console.ReadLine();
