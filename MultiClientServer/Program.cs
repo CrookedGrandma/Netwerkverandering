@@ -115,12 +115,17 @@ namespace MultiClientServer {
         }
 
         public static void Recompute() {
-            foreach (Connection c in Buren.Values) {
-                c.Write.WriteLine("routingtable " + MijnPoort);
-                foreach (RTElem elem in routingTable) {
-                    c.Write.WriteLine(elem.ToString());
+            lock (connlock)
+            {
+                foreach (Connection c in Buren.Values)
+                {
+                    c.Write.WriteLine("routingtable " + MijnPoort);
+                    foreach (RTElem elem in routingTable)
+                    {
+                        c.Write.WriteLine(elem.ToString());
+                    }
+                    c.Write.WriteLine("done");
                 }
-                c.Write.WriteLine("done");
             }
         }
     }
