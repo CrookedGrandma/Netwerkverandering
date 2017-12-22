@@ -30,7 +30,7 @@ namespace MultiClientServer {
             routingTable.Add(new RTElem(MijnPoort, 0, "local"));
 
             for (int i = 1; i < args.Length; i++) {
-                if (args[i].StartsWith("//")) break;
+                //if (args[i].StartsWith("//")) break;
 
                 int poort = int.Parse(args[i]);
                 lock (thislock) {
@@ -86,6 +86,12 @@ namespace MultiClientServer {
                     int poort = int.Parse(delen[1]);
                     if (Buren.ContainsKey(poort)) {
                         Buren.Remove(poort);
+                        foreach (RTElem elem in routingTable) {
+                            if (elem.port == poort) {
+                                routingTable.Remove(elem);
+                                break;
+                            }
+                        }
                         Recompute();
                         //Thread.Sleep(25);
                         Console.WriteLine("Verbroken: " + delen[1]);

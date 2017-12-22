@@ -9,6 +9,7 @@ using System.Threading;
 
 namespace MultiClientServer {
     class Server {
+        private object thislock = new object();
         public Server(int port) {
             // Luister op de opgegeven poort naar verbindingen
             TcpListener server = new TcpListener(IPAddress.Any, port);
@@ -33,7 +34,7 @@ namespace MultiClientServer {
                 Console.WriteLine("//Client maakt verbinding: " + zijnPoort);
 
                 // Zet de nieuwe verbinding in de verbindingslijst
-                lock (Program.thislock) {
+                lock (thislock) {
                     if (!Program.Buren.ContainsKey(zijnPoort)) {
                         Program.Buren.Add(zijnPoort, new Connection(clientIn, clientOut));
                         Program.routingTable.Add(new RTElem(zijnPoort, 1, zijnPoort.ToString()));
