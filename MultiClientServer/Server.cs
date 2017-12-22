@@ -36,6 +36,7 @@ namespace MultiClientServer {
                 lock (Program.thislock) {
                     if (!Program.Buren.ContainsKey(zijnPoort)) {
                         Program.Buren.Add(zijnPoort, new Connection(clientIn, clientOut));
+                        Program.routingTable.Add(new RTElem(zijnPoort, 1, zijnPoort.ToString()));
                     }
                 }
             }

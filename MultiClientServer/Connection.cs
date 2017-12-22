@@ -43,8 +43,16 @@ namespace MultiClientServer {
         // Deze loop leest wat er binnenkomt en print dit
         public void ReaderThread() {
             try {
-                while (true)
-                    Console.WriteLine(Read.ReadLine());
+                while (true) {
+                    string input = Read.ReadLine();
+                    if (input.StartsWith("routingtable")) {
+                        Console.WriteLine("je shit:");
+                        Console.WriteLine(input);
+                    }
+                    else {
+                        Console.WriteLine(input);
+                    }
+                }
             }
             catch { Console.WriteLine("Verbinding niet bestaand"); } // Verbinding is kennelijk verbroken
         }

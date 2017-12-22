@@ -26,6 +26,9 @@ namespace MultiClientServer {
 
             Console.Write("Verbonden met poort ");
             Console.WriteLine(MijnPoort);
+
+            routingTable.Add(new RTElem(MijnPoort, 0, "local"));
+
             for (int i = 1; i < args.Length; i++) {
                 if (args[i].StartsWith("//")) break;
 
@@ -37,6 +40,7 @@ namespace MultiClientServer {
                     }
                     else if (poort > MijnPoort) {
                         Buren.Add(poort, new Connection(poort));
+                        routingTable.Add(new RTElem(poort, 1, poort.ToString()));
                     }
                 }
             }
@@ -77,7 +81,12 @@ namespace MultiClientServer {
                     }
                 }
                 else if (input.StartsWith("R")) {
-                    
+                    foreach (Connection c in Buren.Values) {
+                        c.Write.WriteLine("routingtable <<<actual routingtable>>>");
+                    }
+                    foreach (RTElem elem in routingTable) {
+                        Console.WriteLine(elem.ToString());
+                    }
                 }
                 else {
                     Console.Write("Onbekende instructie: ");
@@ -99,6 +108,15 @@ namespace MultiClientServer {
         public int port { get { return portToGo; } }
         public int dist { get { return distance; } }
         public string viaPort { get { return portToGoThrough; } }
+
+        public RTElem FromString(string input) {
+            string[] delen = input.Split(' ');
+            return new RTElem(int.Parse(delen[0]), int.Parse(delen[1]), delen[2]);
+        }
+
+        public override string ToString() {
+            return port + " " + dist + " " + viaPort;
+        }
 
     }
 }
