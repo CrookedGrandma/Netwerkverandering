@@ -11,6 +11,8 @@ namespace MultiClientServer {
     class Connection {
         public StreamReader Read;
         public StreamWriter Write;
+        private List<RTElem> lastTable;
+        private bool errorfound = false;
 
         // Connection heeft 2 constructoren: deze constructor wordt gebruikt als wij CLIENT worden bij een andere SERVER
         public Connection(int port) {
@@ -22,6 +24,7 @@ namespace MultiClientServer {
             Read = new StreamReader(client.GetStream());
             Write = new StreamWriter(client.GetStream());
             Write.AutoFlush = true;
+            lastTable = new List<RTElem>();
 
             // De server kan niet zien van welke poort wij client zijn, dit moeten we apart laten weten
             Write.WriteLine("Poort: " + Program.MijnPoort);
@@ -33,6 +36,7 @@ namespace MultiClientServer {
         // Deze constructor wordt gebruikt als wij SERVER zijn en een CLIENT maakt met ons verbinding
         public Connection(StreamReader read, StreamWriter write) {
             Read = read; Write = write;
+            lastTable = new List<RTElem>();
 
             // Start het reader-loopje
             new Thread(ReaderThread).Start();
@@ -42,59 +46,76 @@ namespace MultiClientServer {
 
         // Deze loop leest wat er binnenkomt en print dit
         public void ReaderThread() {
-            try
-            {
-                while (true)
-                {
-                    string input = Read.ReadLine();
+            if (!errorfound) {
+                try {
+                    while (true) {
+                        string input = Read.ReadLine();
+                        bool changed = false;
 
-                    // Als het 
-                    if (input.StartsWith("routingtable"))
-                    {
-                        Console.WriteLine("Test:");
-                        string van = input.Split(' ')[1];
-                        string newInput = Read.ReadLine();
-                        while (newInput != "done")
-                        {
-                            RTElem temp = RTElem.FromString(newInput);
-                            if (temp.viaPort != Program.MijnPoort.ToString())
-                            {
-                                bool found = false;
-                                foreach (RTElem elem in Program.routingTable)
-                                {
-                                    if (temp.port == elem.port)
-                                    {
-                                        found = true;
-                                        if (temp.dist + 1 < elem.dist)
-                                        {
-                                            Program.routingTable.Remove(elem);
-                                            Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                        // Als er gevraagd voor een routingtable berekening
+                        if (input.StartsWith("routingtable")) {
+                            Console.WriteLine("Recomputing routing table...");
+                            string van = input.Split(' ')[1];
+                            string newInput = Read.ReadLine();
+                            while (newInput != "done") {
+                                RTElem temp = RTElem.FromString(newInput);
+                                if (temp.viaPort != Program.MijnPoort.ToString()) {
+                                    bool found = false;
+
+                                    restart:
+                                    foreach (RTElem elem in Program.routingTable) {
+                                        if (temp.port == elem.port) {
+                                            found = true;
+                                            if (temp.dist + 1 < elem.dist) {
+                                                Program.routingTable.Remove(elem);
+                                                Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                                changed = true;
+                                                goto restart;
+                                            }
                                         }
                                     }
+
+                                    if (!found) {
+                                        Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                        changed = true;
+                                    }
                                 }
-                                if (!found)
-                                {
-                                    Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                newInput = Read.ReadLine();
+                            }
+
+                            if (changed) {
+                                foreach (Connection c in Program.Buren.Values) {
+                                    c.Write.WriteLine("routingtable " + Program.MijnPoort);
+                                    foreach (RTElem elem in Program.routingTable) {
+                                        c.Write.WriteLine(elem.ToString());
+                                    }
+                                    c.Write.WriteLine("done");
                                 }
                             }
-                            newInput = Read.ReadLine();
                         }
-                        foreach (RTElem item in Program.routingTable)
-                        {
-                            Console.WriteLine(item.ToString());
+
+                        // Als er een bericht gestuurd wordt
+                        else {
+                            Console.WriteLine(input);
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine(input);
                     }
                 }
+                catch (IOException e) {
+                    errorfound = true;
+                    Console.WriteLine("Verbinding niet bestaand");
+                    Console.WriteLine(e.Message);
+                }
+                catch (FormatException e) {
+                    errorfound = true;
+                    Console.WriteLine("Onjuist format");
+                    Console.WriteLine(e.Message);
+                }
+                catch (Exception e) {
+                    errorfound = true;
+                    Console.WriteLine("Andere error");
+                    Console.WriteLine(e.ToString());
+                }
             }
-            catch (IOException e)
-            {
-                Console.WriteLine("Verbinding niet bestaand");
-                Console.WriteLine(e.Message);
-            } // Verbinding is kennelijk verbroken
         }
     }
 }

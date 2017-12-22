@@ -45,6 +45,14 @@ namespace MultiClientServer {
                 }
             }
 
+            foreach (Connection c in Buren.Values) {
+                c.Write.WriteLine("routingtable " + MijnPoort);
+                foreach (RTElem elem in routingTable) {
+                    c.Write.WriteLine(elem.ToString());
+                }
+                c.Write.WriteLine("done");
+            }
+
             while (true) {
                 string input = Console.ReadLine();
                 if (input.StartsWith("C")) {
@@ -71,6 +79,7 @@ namespace MultiClientServer {
                     }
                 }
                 else if (input.StartsWith("D")) {
+                    // Sluit de verbinding
                     string[] delen = input.Split(' ');
                     int poort = int.Parse(delen[1]);
                     if (Buren.ContainsKey(poort)) {
@@ -81,14 +90,7 @@ namespace MultiClientServer {
                     }
                 }
                 else if (input.StartsWith("R")) {
-                    foreach (Connection c in Buren.Values) {
-                        c.Write.WriteLine("routingtable " + MijnPoort);
-                        foreach (RTElem elem in routingTable)
-                        {
-                            c.Write.WriteLine(elem.ToString());
-                        }
-                        c.Write.WriteLine("done");
-                    }
+                    // Laat de routing table zien
                     foreach (RTElem elem in routingTable) {
                         Console.WriteLine(elem.ToString());
                     }
@@ -122,6 +124,5 @@ namespace MultiClientServer {
         public override string ToString() {
             return port + " " + dist + " " + viaPort;
         }
-
     }
 }
