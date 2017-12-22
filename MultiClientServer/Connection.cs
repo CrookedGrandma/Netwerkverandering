@@ -48,7 +48,7 @@ namespace MultiClientServer
                 while (true)
                     Console.WriteLine(Read.ReadLine());
             }
-            catch { } // Verbinding is kennelijk verbroken
+            catch { Console.WriteLine("Verbinding niet bestaand"); } // Verbinding is kennelijk verbroken
         }
     }
 }
