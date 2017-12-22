@@ -80,6 +80,7 @@ namespace MultiClientServer {
                                         changed = true;
                                     }
                                 }
+
                                 newInput = Read.ReadLine();
                             }
 
@@ -112,7 +113,7 @@ namespace MultiClientServer {
                 }
                 catch (Exception e) {
                     errorfound = true;
-                    Console.WriteLine("Andere error");
+                    Console.WriteLine("Overige error");
                     Console.WriteLine(e.ToString());
                 }
             }
