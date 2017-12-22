@@ -60,7 +60,7 @@ namespace MultiClientServer {
 
                         // Als er gevraagd voor een routingtable berekening
                         if (input.StartsWith("routingtable")) {
-                            lock (Program.connlock)
+                            lock (Program.thislock)
                             {
                                 Console.WriteLine("//Recomputing routing table...");
                                 string van = input.Split(' ')[1];

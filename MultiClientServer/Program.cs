@@ -115,7 +115,7 @@ namespace MultiClientServer {
         }
 
         public static void Recompute() {
-            lock (connlock)
+            lock (thislock)
             {
                 foreach (Connection c in Buren.Values)
                 {
