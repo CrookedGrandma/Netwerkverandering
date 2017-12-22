@@ -9,6 +9,7 @@ namespace MultiClientServer {
     class Program {
         static public int MijnPoort;
         static public object thislock = new object();
+        static public object connlock = new object();
         static public Dictionary<int, Connection> Buren = new Dictionary<int, Connection>();
         static public List<RTElem> routingTable = new List<RTElem>();
 

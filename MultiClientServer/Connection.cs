@@ -60,45 +60,57 @@ namespace MultiClientServer {
 
                         // Als er gevraagd voor een routingtable berekening
                         if (input.StartsWith("routingtable")) {
-                            Console.WriteLine("//Recomputing routing table...");
-                            string van = input.Split(' ')[1];
-                            bool changed = false;
-                            string newInput = Read.ReadLine();
-                            while (newInput != "done") {
-                                RTElem temp = RTElem.FromString(newInput);
-                                if (temp.viaPort != Program.MijnPoort.ToString()) {
-                                    bool found = false;
+                            lock (Program.connlock)
+                            {
+                                Console.WriteLine("//Recomputing routing table...");
+                                string van = input.Split(' ')[1];
+                                bool changed = false;
+                                string newInput = Read.ReadLine();
+                                while (newInput != "done")
+                                {
+                                    RTElem temp = RTElem.FromString(newInput);
+                                    if (temp.viaPort != Program.MijnPoort.ToString())
+                                    {
+                                        bool found = false;
 
-                                    restart:
-                                    foreach (RTElem elem in Program.routingTable) {
-                                        if (temp.port == elem.port) {
-                                            found = true;
-                                            if (temp.dist + 1 < elem.dist) {
-                                                Program.routingTable.Remove(elem);
-                                                Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
-                                                Console.WriteLine("Afstand naar " + temp.port + " is nu " + temp.dist + " via " + van);
-                                                changed = true;
-                                                goto restart;
+                                        restart:
+                                        foreach (RTElem elem in Program.routingTable)
+                                        {
+                                            if (temp.port == elem.port)
+                                            {
+                                                found = true;
+                                                if (temp.dist + 1 < elem.dist)
+                                                {
+                                                    Program.routingTable.Remove(elem);
+                                                    Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                                    Console.WriteLine("Afstand naar " + temp.port + " is nu " + temp.dist + " via " + van);
+                                                    changed = true;
+                                                    goto restart;
+                                                }
                                             }
+                                        }
+
+                                        if (!found)
+                                        {
+                                            Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                            changed = true;
                                         }
                                     }
 
-                                    if (!found) {
-                                        Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
-                                        changed = true;
-                                    }
+                                    newInput = Read.ReadLine();
                                 }
 
-                                newInput = Read.ReadLine();
-                            }
-
-                            if (changed) {
-                                foreach (Connection c in Program.Buren.Values) {
-                                    c.Write.WriteLine("routingtable " + Program.MijnPoort);
-                                    foreach (RTElem elem in Program.routingTable) {
-                                        c.Write.WriteLine(elem.ToString());
+                                if (changed)
+                                {
+                                    foreach (Connection c in Program.Buren.Values)
+                                    {
+                                        c.Write.WriteLine("routingtable " + Program.MijnPoort);
+                                        foreach (RTElem elem in Program.routingTable)
+                                        {
+                                            c.Write.WriteLine(elem.ToString());
+                                        }
+                                        c.Write.WriteLine("done");
                                     }
-                                    c.Write.WriteLine("done");
                                 }
                             }
                         }
