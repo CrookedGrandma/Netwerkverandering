@@ -10,6 +10,7 @@ namespace MultiClientServer {
         static public int MijnPoort;
         static public object thislock = new object();
         static public Dictionary<int, Connection> Buren = new Dictionary<int, Connection>();
+        static public List<RTElem> routingTable = new List<RTElem>();
 
         static void Main(string[] args) {
 
@@ -76,7 +77,7 @@ namespace MultiClientServer {
                     }
                 }
                 else if (input.StartsWith("R")) {
-
+                    
                 }
                 else {
                     Console.Write("Onbekende instructie: ");
@@ -84,5 +85,20 @@ namespace MultiClientServer {
                 }
             }
         }
+    }
+
+    public struct RTElem {
+        int portToGo, distance;
+        string portToGoThrough;
+        public RTElem(int portToGo, int distance, string portToGoThrough) {
+            this.portToGo = portToGo;
+            this.distance = distance;
+            this.portToGoThrough = portToGoThrough;
+        }
+
+        public int port { get { return portToGo; } }
+        public int dist { get { return distance; } }
+        public string viaPort { get { return portToGoThrough; } }
+
     }
 }
