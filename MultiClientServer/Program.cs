@@ -82,7 +82,12 @@ namespace MultiClientServer {
                 }
                 else if (input.StartsWith("R")) {
                     foreach (Connection c in Buren.Values) {
-                        c.Write.WriteLine("routingtable <<<actual routingtable>>>");
+                        c.Write.WriteLine("routingtable " + MijnPoort);
+                        foreach (RTElem elem in routingTable)
+                        {
+                            c.Write.WriteLine(elem.ToString());
+                        }
+                        c.Write.WriteLine("done");
                     }
                     foreach (RTElem elem in routingTable) {
                         Console.WriteLine(elem.ToString());
@@ -109,7 +114,7 @@ namespace MultiClientServer {
         public int dist { get { return distance; } }
         public string viaPort { get { return portToGoThrough; } }
 
-        public RTElem FromString(string input) {
+        public static RTElem FromString(string input) {
             string[] delen = input.Split(' ');
             return new RTElem(int.Parse(delen[0]), int.Parse(delen[1]), delen[2]);
         }

@@ -42,19 +42,59 @@ namespace MultiClientServer {
 
         // Deze loop leest wat er binnenkomt en print dit
         public void ReaderThread() {
-            try {
-                while (true) {
+            try
+            {
+                while (true)
+                {
                     string input = Read.ReadLine();
-                    if (input.StartsWith("routingtable")) {
-                        Console.WriteLine("je shit:");
-                        Console.WriteLine(input);
+
+                    // Als het 
+                    if (input.StartsWith("routingtable"))
+                    {
+                        Console.WriteLine("Test:");
+                        string van = input.Split(' ')[1];
+                        string newInput = Read.ReadLine();
+                        while (newInput != "done")
+                        {
+                            RTElem temp = RTElem.FromString(newInput);
+                            if (temp.viaPort != Program.MijnPoort.ToString())
+                            {
+                                bool found = false;
+                                foreach (RTElem elem in Program.routingTable)
+                                {
+                                    if (temp.port == elem.port)
+                                    {
+                                        found = true;
+                                        if (temp.dist + 1 < elem.dist)
+                                        {
+                                            Program.routingTable.Remove(elem);
+                                            Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                        }
+                                    }
+                                }
+                                if (!found)
+                                {
+                                    Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
+                                }
+                            }
+                            newInput = Read.ReadLine();
+                        }
+                        foreach (RTElem item in Program.routingTable)
+                        {
+                            Console.WriteLine(item.ToString());
+                        }
                     }
-                    else {
+                    else
+                    {
                         Console.WriteLine(input);
                     }
                 }
             }
-            catch { Console.WriteLine("Verbinding niet bestaand"); } // Verbinding is kennelijk verbroken
+            catch (IOException e)
+            {
+                Console.WriteLine("Verbinding niet bestaand");
+                Console.WriteLine(e.Message);
+            } // Verbinding is kennelijk verbroken
         }
     }
 }
