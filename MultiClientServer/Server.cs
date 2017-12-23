@@ -17,7 +17,7 @@ namespace MultiClientServer {
             // Start een aparte thread op die verbindingen aanneemt
             new Thread(() => AcceptLoop(server)).Start();
 
-            Console.Title = port.ToString();
+            Console.Title = "NetChange " + port.ToString();
         }
 
         private void AcceptLoop(TcpListener handle) {
