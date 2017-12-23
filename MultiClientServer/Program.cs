@@ -83,22 +83,35 @@ namespace MultiClientServer {
                 }
                 else if (input.StartsWith("D")) {
                     // Sluit de verbinding
-                    string[] delen = input.Split(' ');
-                    int poort = int.Parse(delen[1]);
-                    if (Buren.ContainsKey(poort)) {
-                        Buren.Remove(poort);
-                        foreach (RTElem elem in routingTable) {
-                            if (elem.port == poort) {
-                                routingTable.Remove(elem);
-                                break;
+                    lock (thislock) {
+                        string[] delen = input.Split(' ');
+                        int poort = int.Parse(delen[1]);
+                        if (Buren.ContainsKey(poort)) {
+                            /*Buren[poort].Write.WriteLine("delete " + MijnPoort);
+                            Buren.Remove(poort);
+                            foreach (RTElem elem in routingTable) {
+                                if (elem.port == poort) {
+                                    routingTable.Remove(elem);
+                                    routingTable.Add(new RTElem(poort, 9999999, elem.viaPort));
+                                    break;
+                                }
+                            }*/
+                            Buren[poort].Write.WriteLine("delete " + MijnPoort);
+                            Buren.Remove(poort);
+                            routingTable = null;
+                            foreach (Connection c in Buren.Values) {
+                                c.Write.WriteLine("purge");
                             }
+                            RTInit();
+                            //Thread.Sleep(1000);
+                            if (Buren.Count > 0) {
+                                //Buren.First().Value.Write.WriteLine("recompute");
+                            }
+                            Console.WriteLine("Verbroken: " + delen[1]);
                         }
-                        Recompute();
-                        //Thread.Sleep(25);
-                        Console.WriteLine("Verbroken: " + delen[1]);
-                    }
-                    else {
-                        Console.WriteLine("Poort " + delen[1] + " is niet bekend");
+                        else {
+                            Console.WriteLine("Poort " + delen[1] + " is niet bekend");
+                        }
                     }
                 }
                 else if (input.StartsWith("R")) {
@@ -106,6 +119,9 @@ namespace MultiClientServer {
                     foreach (RTElem elem in routingTable) {
                         Console.WriteLine(elem.ToString());
                     }
+                }
+                else if (input.StartsWith("recompute")) {
+                    Recompute();
                 }
                 else {
                     Console.Write("//Onbekende instructie: ");
@@ -126,6 +142,14 @@ namespace MultiClientServer {
                     }
                     c.Write.WriteLine("done");
                 }
+            }
+        }
+
+        public static void RTInit() {
+            routingTable = new List<RTElem>();
+            routingTable.Add(new RTElem(MijnPoort, 0, "local"));
+            foreach (int port in Buren.Keys) {
+                routingTable.Add(new RTElem(port, 1, port.ToString()));
             }
         }
     }
@@ -153,3 +177,4 @@ namespace MultiClientServer {
         }
     }
 }
+ 

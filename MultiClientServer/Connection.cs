@@ -81,9 +81,13 @@ namespace MultiClientServer {
                                                 found = true;
                                                 if (temp.dist + 1 < elem.dist)
                                                 {
-                                                    Program.routingTable.Remove(elem);
-                                                    Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
-                                                    Console.WriteLine("Afstand naar " + temp.port + " is nu " + temp.dist + " via " + van);
+                                                    Replace(elem, temp, van);
+                                                    changed = true;
+                                                    goto restart;
+                                                }
+                                                if (van == elem.viaPort && temp.dist + 1 > elem.dist) {
+                                                    Console.WriteLine("//ALLAHU AKBAR " + temp.ToString());
+                                                    Replace(elem, temp, van);
                                                     changed = true;
                                                     goto restart;
                                                 }
@@ -135,6 +139,35 @@ namespace MultiClientServer {
                                 }
                             }
                         }
+
+                        // Als er een poort verwijderd moet worden
+                        else if (input.StartsWith("delete")) {
+                            string[] delen = input.Split(' ');
+                            int port = int.Parse(delen[1]);
+                            if (Program.Buren.ContainsKey(port)) {
+                                Program.Buren.Remove(port);
+                            }
+                        }
+
+                        // Als een routing table verwijderd moet worden
+                        else if (input == "purge") {
+                            if (Program.routingTable != null) {
+                                if (Program.routingTable.Count > Program.Buren.Count + 1) {
+                                    lock (Program.thislock) {
+                                        foreach (Connection c in Program.Buren.Values) {
+                                            c.Write.WriteLine("purge");
+                                        }
+                                        Program.routingTable = null;
+                                        Program.RTInit();
+                                    }
+                                }
+                            }
+                        }
+
+                        // Als er een recompute uitgevoerd moet worden zonder dat je de hele boel wil doorgeven
+                        else if (input == "recompute") {
+                            Program.Recompute();
+                        }
                     }
                 }
                 catch (IOException e) {
@@ -155,5 +188,12 @@ namespace MultiClientServer {
                 }
             }
         }
+
+        public void Replace(RTElem oldE, RTElem newE, string van) {
+            Program.routingTable.Remove(oldE);
+            Program.routingTable.Add(new RTElem(newE.port, newE.dist + 1, van));
+            Console.WriteLine("Afstand naar " + newE.port + " is nu " + newE.dist + " via " + van);
+        }
+
     }
 }
