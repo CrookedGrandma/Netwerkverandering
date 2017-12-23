@@ -7,9 +7,8 @@ using System.Security.Cryptography;
 
 namespace MultiClientServer {
     class Program {
-        static public int MijnPoort, aantalRetries;
+        static public int MijnPoort;
         static public object thislock = new object();
-        static public object connlock = new object();
         static public Dictionary<int, Connection> Buren = new Dictionary<int, Connection>();
         static public List<RTElem> routingTable = new List<RTElem>();
  
@@ -87,7 +86,8 @@ namespace MultiClientServer {
                         string[] delen = input.Split(' ');
                         int poort = int.Parse(delen[1]);
                         if (Buren.ContainsKey(poort)) {
-                            Buren[poort].Write.WriteLine("delete " + MijnPoort);
+                            Connection tempCon = Buren[poort];
+                            tempCon.Write.WriteLine("delete " + MijnPoort);
                             Buren.Remove(poort);
 
                             retry:
@@ -102,9 +102,24 @@ namespace MultiClientServer {
                                 }
                             }
                             Recompute();
+                            Thread.Sleep(1000);
+                            if (Buren.Count > 0)
+                            {
+                                foreach (Connection c in Buren.Values)
+                                {
+                                    foreach (RTElem elem in routingTable)
+                                    {
+                                        c.Write.WriteLine("sendTerminate " + elem.port);
+                                    }
+                                }
+                            }
+                            foreach (RTElem elem in routingTable)
+                            {
+                                tempCon.Write.WriteLine("sendTerminate " + elem.port);
+                            }
 
-                            
-                            
+
+
                             /*Buren[poort].Write.WriteLine("delete " + MijnPoort);
                             //Connection tempCon = null;
                             //if (Buren.Count == 1) tempCon = Buren[poort];

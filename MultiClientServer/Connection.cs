@@ -7,15 +7,18 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 
-namespace MultiClientServer {
-    class Connection {
+namespace MultiClientServer
+{
+    class Connection
+    {
         public StreamReader Read;
         public StreamWriter Write;
         private List<RTElem> lastTable;
         private bool errorfound = false;
 
         // Connection heeft 2 constructoren: deze constructor wordt gebruikt als wij CLIENT worden bij een andere SERVER
-        public Connection(int port) {
+        public Connection(int port)
+        {
             TcpClient client;
             /*connect:
             try { client = new TcpClient("localhost", port); }
@@ -41,7 +44,8 @@ namespace MultiClientServer {
         }
 
         // Deze constructor wordt gebruikt als wij SERVER zijn en een CLIENT maakt met ons verbinding
-        public Connection(StreamReader read, StreamWriter write) {
+        public Connection(StreamReader read, StreamWriter write)
+        {
             Read = read; Write = write;
             lastTable = new List<RTElem>();
 
@@ -52,19 +56,25 @@ namespace MultiClientServer {
         // LET OP: Nadat er verbinding is gelegd, kun je vergeten wie er client/server is (en dat kun je aan het Connection-object dus ook niet zien!)
 
         // Deze loop leest wat er binnenkomt en print dit
-        public void ReaderThread() {
-            if (!errorfound) {
-                try {
-                    while (true) {
+        public void ReaderThread()
+        {
+            if (!errorfound)
+            {
+                try
+                {
+                    while (true)
+                    {
                         string input = Read.ReadLine();
 
                         // Als er gevraagd voor een routingtable berekening
-                        if (input.StartsWith("routingtable")) {
+                        if (input.StartsWith("routingtable"))
+                        {
                             lock (Program.thislock)
                             {
                                 Console.WriteLine("//Recomputing routing table...");
                                 string van = input.Split(' ')[1];
                                 bool changed = false;
+                                //bool honderd = false;
                                 string newInput = Read.ReadLine();
                                 while (newInput != "done")
                                 {
@@ -73,7 +83,7 @@ namespace MultiClientServer {
                                     {
                                         bool found = false;
 
-                                        if (temp.dist > 50 && temp.dist < 130) { Program.Recompute(); }
+                                        //if (temp.dist > 98 && temp.dist < 130) { honderd = true; }
                                         restart:
                                         foreach (RTElem elem in Program.routingTable)
                                         {
@@ -89,9 +99,20 @@ namespace MultiClientServer {
                                                 if (elem.viaPort == van && temp.dist > elem.dist)
                                                 {
                                                     Console.WriteLine("//IK CHANGE EIGEN Waarde.");
-                                                    Replace(elem, temp, van);
+
+                                                    if (Program.Buren.Count > 0)
+                                                    {
+                                                        Replace(elem, temp, van);
+                                                        changed = true;
+                                                        goto restart;
+                                                    }
+
+                                                }
+                                                if (elem.port == temp.port && elem.dist < temp.dist - 5)
+                                                {
+                                                    Console.WriteLine("//Ik wil een honderd changen.");
                                                     changed = true;
-                                                    goto restart;
+                                                    Program.Recompute();
                                                 }
                                             }
                                         }
@@ -111,26 +132,28 @@ namespace MultiClientServer {
                                 {
                                     LocalRecompute();
                                 }
-                                else
-                                {
-                                    Terminate();
-                                }
+
                             }
                         }
 
                         // Als er een bericht gestuurd wordt
-                        else if (input.StartsWith("message")) {
+                        else if (input.StartsWith("message"))
+                        {
                             string[] delen = input.Split(new char[] { ' ' }, 3);
                             int port = int.Parse(delen[1]);
                             string bericht = delen[2];
                             // Bericht voor dit proces
-                            if (port == Program.MijnPoort) {
+                            if (port == Program.MijnPoort)
+                            {
                                 Console.WriteLine(bericht);
                             }
                             // Bericht voor ander proces
-                            else {
-                                foreach (RTElem elem in Program.routingTable) {
-                                    if (elem.port == port) {
+                            else
+                            {
+                                foreach (RTElem elem in Program.routingTable)
+                                {
+                                    if (elem.port == port)
+                                    {
                                         Program.Buren[int.Parse(elem.viaPort)].Write.WriteLine(input);
                                         Console.WriteLine("Bericht voor " + port + " doorgestuurd naar " + elem.viaPort);
                                         break;
@@ -140,21 +163,24 @@ namespace MultiClientServer {
                         }
 
                         // Als er een poort verwijderd moet wo
-                        else if (input.StartsWith("delete")) {
-                            lock (Program.thislock) {
+                        else if (input.StartsWith("delete"))
+                        {
+                            lock (Program.thislock)
+                            {
                                 string[] delen = input.Split(' ');
                                 int port = int.Parse(delen[1]);
-                                if (Program.Buren.ContainsKey(port)) {
+                                if (Program.Buren.ContainsKey(port))
+                                {
                                     Program.Buren.Remove(port);
                                     retry:
                                     foreach (RTElem elem in Program.routingTable)
                                     {
                                         if (elem.viaPort == delen[1] && elem.dist != 100)
                                         {
-                                        Program.routingTable.Remove(elem);
-                                        Program.routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
-                                        Console.WriteLine("//Ding verwijderd");
-                                        goto retry;
+                                            Program.routingTable.Remove(elem);
+                                            Program.routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
+                                            Console.WriteLine("//Ding verwijderd");
+                                            goto retry;
                                         }
                                     }
                                 }
@@ -164,10 +190,14 @@ namespace MultiClientServer {
                         }
 
                         // Als een routing table verwijderd moet worden
-                        else if (input == "purge") {
-                            if (Program.routingTable.Count > Program.Buren.Count + 1) {
-                                lock (Program.thislock) {
-                                    foreach (Connection c in Program.Buren.Values) {
+                        else if (input == "purge")
+                        {
+                            if (Program.routingTable.Count > Program.Buren.Count + 1)
+                            {
+                                lock (Program.thislock)
+                                {
+                                    foreach (Connection c in Program.Buren.Values)
+                                    {
                                         c.Write.WriteLine("purge");
                                     }
                                     Program.routingTable.Clear();
@@ -176,34 +206,63 @@ namespace MultiClientServer {
                             }
                         }
 
+                        // Als er een terminatie instructie moet worden doorgestuurd
+                        else if (input.StartsWith("sendTerminate"))
+                        {
+                            string[] delen = input.Split(' ');
+                            int port = int.Parse(delen[1]);
+                            // Terminate dit proces
+                            if (port == Program.MijnPoort)
+                            {
+                                Terminate();
+                            }
+                            // Terminate ander proces
+                            else
+                            {
+                                foreach (RTElem elem in Program.routingTable)
+                                {
+                                    if (elem.port == port)
+                                    {
+                                        int viaPoort = int.Parse(elem.viaPort);
+                                        if (Program.Buren.ContainsKey(viaPoort))
+                                        {
+                                            Program.Buren[viaPoort].Write.WriteLine(input);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
                         // Als er een recompute uitgevoerd moet worden zonder dat je de hele boel wil doorgeven
-                        else if (input == "recompute") {
+                        else if (input == "recompute")
+                        {
                             Program.Recompute();
                         }
 
                         // Als alle 100+ verbindingen verwijderd moeten worden
                         else if (input == "terminate")
                         {
-                            if (Terminate())
-                            {
-
-                            }
+                            Terminate();
                         }
                     }
                 }
-                catch (IOException e) {
+                catch (IOException e)
+                {
                     errorfound = true;
                     Console.WriteLine("Onbereikbaar: " + Program.MijnPoort);
                     //Console.WriteLine("Verbinding niet bestaand");
                     //Console.WriteLine(e.Message);
                 }
-                catch (FormatException e) {
+                catch (FormatException e)
+                {
                     errorfound = true;
                     Console.WriteLine("//Onjuist format");
                     Console.WriteLine(e.Message);
                     Console.WriteLine(e.StackTrace);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     errorfound = true;
                     Console.WriteLine("//Overige error");
                     Console.WriteLine(e.ToString());
@@ -211,11 +270,13 @@ namespace MultiClientServer {
             }
         }
 
-        public void Replace(RTElem oldE, RTElem newE, string van) {
+        public void Replace(RTElem oldE, RTElem newE, string van)
+        {
             Program.routingTable.Remove(oldE);
             Program.routingTable.Add(new RTElem(newE.port, newE.dist + 1, van));
             Program.routingTable = Program.routingTable.Distinct().ToList();
-            if (newE.dist <= 25) {
+            if (newE.dist <= 25)
+            {
                 Console.WriteLine("Afstand naar " + newE.port + " is nu " + newE.dist + " via " + van);
             }
         }
@@ -235,18 +296,24 @@ namespace MultiClientServer {
 
         private bool Terminate()
         {
+            Console.WriteLine("//Terminating...");
             bool changed = false;
-            tryagain:
-            foreach (RTElem elem in Program.routingTable)
+            lock (Program.thislock)
             {
-                if (elem.dist > 99)
+                tryagain:
+                foreach (RTElem elem in Program.routingTable)
                 {
-                    Program.routingTable.Remove(elem);
-                    changed = true;
-                    goto tryagain;
+                    if (elem.dist > 99)
+                    {
+                        Program.routingTable.Remove(elem);
+                        changed = true;
+                        Console.WriteLine("//////Terminated");
+                        goto tryagain;
+                    }
                 }
+                Console.WriteLine("//CHANGED: " + changed);
+                return changed;
             }
-            return changed;
         }
     }
 }
