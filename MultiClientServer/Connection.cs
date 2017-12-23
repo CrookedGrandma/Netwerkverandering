@@ -205,7 +205,9 @@ namespace MultiClientServer {
             Program.routingTable.Remove(oldE);
             Program.routingTable.Add(new RTElem(newE.port, newE.dist + 1, van));
             Program.routingTable = Program.routingTable.Distinct().ToList();
-            Console.WriteLine("Afstand naar " + newE.port + " is nu " + newE.dist + " via " + van);
+            if (newE.dist <= 25) {
+                Console.WriteLine("Afstand naar " + newE.port + " is nu " + newE.dist + " via " + van);
+            }
         }
 
         private void LocalRecompute()
