@@ -73,6 +73,8 @@ namespace MultiClientServer {
                                     {
                                         bool found = false;
 
+                                        if (temp.dist > 50) { changed = true; }
+                                        
                                         restart:
                                         foreach (RTElem elem in Program.routingTable)
                                         {
@@ -85,8 +87,9 @@ namespace MultiClientServer {
                                                     changed = true;
                                                     goto restart;
                                                 }
-                                                if (van == elem.viaPort && temp.dist + 1 > elem.dist) {
-                                                    Console.WriteLine("//ALLAHU AKBAR " + temp.ToString());
+                                                if (elem.viaPort == van && temp.dist > elem.dist)
+                                                {
+                                                    Console.WriteLine("//IK CHANGE EIGEN Waarde.");
                                                     Replace(elem, temp, van);
                                                     changed = true;
                                                     goto restart;
@@ -106,15 +109,7 @@ namespace MultiClientServer {
 
                                 if (changed)
                                 {
-                                    foreach (Connection c in Program.Buren.Values)
-                                    {
-                                        c.Write.WriteLine("routingtable " + Program.MijnPoort);
-                                        foreach (RTElem elem in Program.routingTable)
-                                        {
-                                            c.Write.WriteLine(elem.ToString());
-                                        }
-                                        c.Write.WriteLine("done");
-                                    }
+                                    LocalRecompute();
                                 }
                             }
                         }
@@ -147,7 +142,19 @@ namespace MultiClientServer {
                                 int port = int.Parse(delen[1]);
                                 if (Program.Buren.ContainsKey(port)) {
                                     Program.Buren.Remove(port);
+                                    foreach (RTElem elem in Program.routingTable)
+                                        {
+                                            if (elem.port == port)
+                                            {
+                                            Program.routingTable.Remove(elem);
+                                            Program.routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
+                                            Console.WriteLine("//Ding verwijderd");
+                                            break;
+                                            }
+                                        }
                                 }
+                                Console.WriteLine("//IK RECOMPUTEEERRRT");
+                                Program.Recompute();
                             }
                         }
 
@@ -199,6 +206,19 @@ namespace MultiClientServer {
             Program.routingTable.Add(new RTElem(newE.port, newE.dist + 1, van));
             Program.routingTable = Program.routingTable.Distinct().ToList();
             Console.WriteLine("Afstand naar " + newE.port + " is nu " + newE.dist + " via " + van);
+        }
+
+        private void LocalRecompute()
+        {
+            foreach (Connection c in Program.Buren.Values)
+            {
+                c.Write.WriteLine("routingtable " + Program.MijnPoort);
+                foreach (RTElem elem in Program.routingTable)
+                {
+                    c.Write.WriteLine(elem.ToString());
+                }
+                c.Write.WriteLine("done");
+            }
         }
 
     }

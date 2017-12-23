@@ -87,6 +87,21 @@ namespace MultiClientServer {
                         string[] delen = input.Split(' ');
                         int poort = int.Parse(delen[1]);
                         if (Buren.ContainsKey(poort)) {
+                            Buren[poort].Write.WriteLine("delete " + MijnPoort);
+                            Buren.Remove(poort);
+
+                            foreach (RTElem elem in routingTable)
+                            {
+                                if (elem.port == poort)
+                                {
+                                    routingTable.Remove(elem);
+                                    routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
+                                    Console.WriteLine("//Elementje verwijderd uit tabel");
+                                    break;
+                                }
+                            }
+                            Recompute();
+                            
                             /*Buren[poort].Write.WriteLine("delete " + MijnPoort);
                             //Connection tempCon = null;
                             //if (Buren.Count == 1) tempCon = Buren[poort];
