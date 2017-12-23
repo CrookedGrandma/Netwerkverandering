@@ -88,7 +88,7 @@ namespace MultiClientServer {
                                 }
                             }
                             Recompute();
-                            Thread.Sleep(1000);
+                            /*Thread.Sleep(1000);
                             if (Buren.Count > 0) {
                                 foreach (Connection c in Buren.Values) {
                                     foreach (RTElem elem in routingTable) {
@@ -98,7 +98,7 @@ namespace MultiClientServer {
                             }
                             foreach (RTElem elem in routingTable) {
                                 tempCon.Write.WriteLine("sendTerminate " + elem.port);
-                            }
+                            }*/
                             Console.WriteLine("Verbroken: " + delen[1]);
                         }
                         else {

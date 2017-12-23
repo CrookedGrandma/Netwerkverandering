@@ -161,8 +161,8 @@ namespace MultiClientServer {
                             }
                         }
 
-                        // Als er een terminatie instructie moet worden doorgestuurd
-                        else if (input.StartsWith("sendTerminate")) {
+                        // Als er een terminatie instructie moet worden doorgestuurd Werkt niet dus commented
+                        /*else if (input.StartsWith("sendTerminate")) {
                             string[] delen = input.Split(' ');
                             int port = int.Parse(delen[1]);
                             // Terminate dit proces
@@ -181,7 +181,7 @@ namespace MultiClientServer {
                                     }
                                 }
                             }
-                        }
+                        }*/
 
                         // Als er een recompute uitgevoerd moet worden (debugging)
                         else if (input == "recompute") {
@@ -226,7 +226,7 @@ namespace MultiClientServer {
             }
         }
 
-        private bool Terminate() {
+        /*private bool Terminate() {
             Console.WriteLine("//Terminating...");
             bool changed = false;
             lock (Program.thislock) {
@@ -242,6 +242,6 @@ namespace MultiClientServer {
                 Console.WriteLine("//CHANGED: " + changed);
                 return changed;
             }
-        }
+        }*/
     }
 }
