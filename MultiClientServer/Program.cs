@@ -105,7 +105,7 @@ namespace MultiClientServer {
                             RTInit();
                             //Thread.Sleep(1000);
                             if (Buren.Count > 0) {
-                                //Buren.First().Value.Write.WriteLine("recompute");
+                                Buren.First().Value.Write.WriteLine("recompute");
                             }
                             Console.WriteLine("Verbroken: " + delen[1]);
                         }
