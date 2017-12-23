@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
 
 namespace MultiClientServer {
     class Program {
@@ -11,18 +8,11 @@ namespace MultiClientServer {
         static public object thislock = new object();
         static public Dictionary<int, Connection> Buren = new Dictionary<int, Connection>();
         static public List<RTElem> routingTable = new List<RTElem>();
- 
+
         static void Main(string[] args) {
 
-            //Console.Write("Op welke poort ben ik server? ");
-            //MijnPoort = int.Parse(Console.ReadLine());
             MijnPoort = int.Parse(args[0]);
             new Server(MijnPoort);
-
-            //Thread.Sleep(500);
-
-            //Console.WriteLine("Typ [verbind poortnummer] om verbinding te maken, bijvoorbeeld: verbind 1100");
-            //Console.WriteLine("Typ [poortnummer bericht] om een bericht te sturen, bijvoorbeeld: 1100 hoi hoi");
 
             Console.Write("//Verbonden met poort ");
             Console.WriteLine(MijnPoort);
@@ -30,7 +20,6 @@ namespace MultiClientServer {
             routingTable.Add(new RTElem(MijnPoort, 0, "local"));
 
             for (int i = 1; i < args.Length; i++) {
-                //if (args[i].StartsWith("//")) break;
 
                 int poort = int.Parse(args[i]);
                 lock (thislock) {
@@ -60,7 +49,6 @@ namespace MultiClientServer {
                         // Leg verbinding aan (als client)
                         Buren.Add(poort, new Connection(poort));
                         Recompute();
-                        //Thread.Sleep(25);
                         Console.WriteLine("Verbonden: " + poortStr);
                     }
                 }
@@ -91,10 +79,8 @@ namespace MultiClientServer {
                             Buren.Remove(poort);
 
                             retry:
-                            foreach (RTElem elem in routingTable)
-                            {
-                                if (elem.viaPort == delen[1] && elem.dist != 100)
-                                {
+                            foreach (RTElem elem in routingTable) {
+                                if (elem.viaPort == delen[1] && elem.dist != 100) {
                                     routingTable.Remove(elem);
                                     routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
                                     Console.WriteLine("//Elementje verwijderd uit tabel");
@@ -103,40 +89,16 @@ namespace MultiClientServer {
                             }
                             Recompute();
                             Thread.Sleep(1000);
-                            if (Buren.Count > 0)
-                            {
-                                foreach (Connection c in Buren.Values)
-                                {
-                                    foreach (RTElem elem in routingTable)
-                                    {
+                            if (Buren.Count > 0) {
+                                foreach (Connection c in Buren.Values) {
+                                    foreach (RTElem elem in routingTable) {
                                         c.Write.WriteLine("sendTerminate " + elem.port);
                                     }
                                 }
                             }
-                            foreach (RTElem elem in routingTable)
-                            {
+                            foreach (RTElem elem in routingTable) {
                                 tempCon.Write.WriteLine("sendTerminate " + elem.port);
                             }
-
-
-
-                            /*Buren[poort].Write.WriteLine("delete " + MijnPoort);
-                            //Connection tempCon = null;
-                            //if (Buren.Count == 1) tempCon = Buren[poort];
-                            Buren.Remove(poort);
-                            //if (Buren.Count == 0) tempCon.Write.WriteLine("recompute");
-                            routingTable.Clear();
-                            lock (thislock) {
-                                foreach (Connection c in Buren.Values) {
-                                    c.Write.WriteLine("purge");
-                                }
-                            }
-                            RTInit();
-                            //Thread.Sleep(1000);
-                            if (Buren.Count > 0) {
-                                Buren.First().Value.Write.WriteLine("recompute");
-                            }
-                            Recompute();*/
                             Console.WriteLine("Verbroken: " + delen[1]);
                         }
                         else {
@@ -165,13 +127,10 @@ namespace MultiClientServer {
         }
 
         public static void Recompute() {
-            lock (thislock)
-            {
-                foreach (Connection c in Buren.Values)
-                {
+            lock (thislock) {
+                foreach (Connection c in Buren.Values) {
                     c.Write.WriteLine("routingtable " + MijnPoort);
-                    foreach (RTElem elem in routingTable)
-                    {
+                    foreach (RTElem elem in routingTable) {
                         c.Write.WriteLine(elem.ToString());
                     }
                     c.Write.WriteLine("done");
@@ -211,4 +170,3 @@ namespace MultiClientServer {
         }
     }
 }
- 
