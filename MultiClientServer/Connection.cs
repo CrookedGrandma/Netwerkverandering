@@ -73,8 +73,7 @@ namespace MultiClientServer {
                                     {
                                         bool found = false;
 
-                                        if (temp.dist > 50) { changed = true; }
-                                        
+                                        if (temp.dist > 50 && temp.dist < 130) { Program.Recompute(); }
                                         restart:
                                         foreach (RTElem elem in Program.routingTable)
                                         {
@@ -97,6 +96,7 @@ namespace MultiClientServer {
                                             }
                                         }
 
+
                                         if (!found)
                                         {
                                             Program.routingTable.Add(new RTElem(temp.port, temp.dist + 1, van));
@@ -110,6 +110,10 @@ namespace MultiClientServer {
                                 if (changed)
                                 {
                                     LocalRecompute();
+                                }
+                                else
+                                {
+                                    Terminate();
                                 }
                             }
                         }
@@ -135,23 +139,24 @@ namespace MultiClientServer {
                             }
                         }
 
-                        // Als er een poort verwijderd moet worden
+                        // Als er een poort verwijderd moet wo
                         else if (input.StartsWith("delete")) {
                             lock (Program.thislock) {
                                 string[] delen = input.Split(' ');
                                 int port = int.Parse(delen[1]);
                                 if (Program.Buren.ContainsKey(port)) {
                                     Program.Buren.Remove(port);
+                                    retry:
                                     foreach (RTElem elem in Program.routingTable)
+                                    {
+                                        if (elem.viaPort == delen[1] && elem.dist != 100)
                                         {
-                                            if (elem.port == port)
-                                            {
-                                            Program.routingTable.Remove(elem);
-                                            Program.routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
-                                            Console.WriteLine("//Ding verwijderd");
-                                            break;
-                                            }
+                                        Program.routingTable.Remove(elem);
+                                        Program.routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
+                                        Console.WriteLine("//Ding verwijderd");
+                                        goto retry;
                                         }
+                                    }
                                 }
                                 Console.WriteLine("//IK RECOMPUTEEERRRT");
                                 Program.Recompute();
@@ -174,11 +179,15 @@ namespace MultiClientServer {
                         // Als er een recompute uitgevoerd moet worden zonder dat je de hele boel wil doorgeven
                         else if (input == "recompute") {
                             Program.Recompute();
-                            /*lock (Program.thislock) {
-                                foreach (Connection c in Program.Buren.Values) {
-                                    c.Write.WriteLine("recompute");
-                                }
-                            }*/
+                        }
+
+                        // Als alle 100+ verbindingen verwijderd moeten worden
+                        else if (input == "terminate")
+                        {
+                            if (Terminate())
+                            {
+
+                            }
                         }
                     }
                 }
@@ -192,6 +201,7 @@ namespace MultiClientServer {
                     errorfound = true;
                     Console.WriteLine("//Onjuist format");
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
                 }
                 catch (Exception e) {
                     errorfound = true;
@@ -223,5 +233,20 @@ namespace MultiClientServer {
             }
         }
 
+        private bool Terminate()
+        {
+            bool changed = false;
+            tryagain:
+            foreach (RTElem elem in Program.routingTable)
+            {
+                if (elem.dist > 99)
+                {
+                    Program.routingTable.Remove(elem);
+                    changed = true;
+                    goto tryagain;
+                }
+            }
+            return changed;
+        }
     }
 }

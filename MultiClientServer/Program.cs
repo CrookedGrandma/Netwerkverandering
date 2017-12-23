@@ -7,12 +7,12 @@ using System.Security.Cryptography;
 
 namespace MultiClientServer {
     class Program {
-        static public int MijnPoort;
+        static public int MijnPoort, aantalRetries;
         static public object thislock = new object();
         static public object connlock = new object();
         static public Dictionary<int, Connection> Buren = new Dictionary<int, Connection>();
         static public List<RTElem> routingTable = new List<RTElem>();
-
+ 
         static void Main(string[] args) {
 
             //Console.Write("Op welke poort ben ik server? ");
@@ -90,17 +90,20 @@ namespace MultiClientServer {
                             Buren[poort].Write.WriteLine("delete " + MijnPoort);
                             Buren.Remove(poort);
 
+                            retry:
                             foreach (RTElem elem in routingTable)
                             {
-                                if (elem.port == poort)
+                                if (elem.viaPort == delen[1] && elem.dist != 100)
                                 {
                                     routingTable.Remove(elem);
                                     routingTable.Add(new RTElem(elem.port, 100, elem.viaPort));
                                     Console.WriteLine("//Elementje verwijderd uit tabel");
-                                    break;
+                                    goto retry;
                                 }
                             }
                             Recompute();
+
+                            
                             
                             /*Buren[poort].Write.WriteLine("delete " + MijnPoort);
                             //Connection tempCon = null;
