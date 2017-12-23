@@ -53,14 +53,13 @@ namespace MultiClientServer {
                                 Console.WriteLine("//Recomputing routing table...");
                                 string van = input.Split(' ')[1];
                                 bool changed = false;
-                                //bool honderd = false;
                                 string newInput = Read.ReadLine();
                                 while (newInput != "done") {
                                     RTElem temp = RTElem.FromString(newInput);
                                     if (temp.viaPort != Program.MijnPoort.ToString()) {
                                         bool found = false;
 
-                                        //if (temp.dist > 98 && temp.dist < 130) { honderd = true; }
+                                        if (temp.dist > 98 && temp.dist < 130) { Program.Recompute(); }
                                         restart:
                                         foreach (RTElem elem in Program.routingTable) {
                                             if (temp.port == elem.port) {
@@ -70,7 +69,7 @@ namespace MultiClientServer {
                                                     changed = true;
                                                     goto restart;
                                                 }
-                                                if (elem.viaPort == van && temp.dist > elem.dist) {
+                                                /*if (elem.viaPort == van && temp.dist > elem.dist) {
                                                     Console.WriteLine("//IK CHANGE EIGEN Waarde.");
 
                                                     if (Program.Buren.Count > 0) {
@@ -79,7 +78,7 @@ namespace MultiClientServer {
                                                         goto restart;
                                                     }
 
-                                                }
+                                                }*/
                                                 if (elem.port == temp.port && elem.dist < temp.dist - 5) {
                                                     Console.WriteLine("//Ik wil een honderd changen.");
                                                     changed = true;
