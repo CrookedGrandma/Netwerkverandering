@@ -142,24 +142,24 @@ namespace MultiClientServer {
 
                         // Als er een poort verwijderd moet worden
                         else if (input.StartsWith("delete")) {
-                            string[] delen = input.Split(' ');
-                            int port = int.Parse(delen[1]);
-                            if (Program.Buren.ContainsKey(port)) {
-                                Program.Buren.Remove(port);
+                            lock (Program.thislock) {
+                                string[] delen = input.Split(' ');
+                                int port = int.Parse(delen[1]);
+                                if (Program.Buren.ContainsKey(port)) {
+                                    Program.Buren.Remove(port);
+                                }
                             }
                         }
 
                         // Als een routing table verwijderd moet worden
                         else if (input == "purge") {
-                            if (Program.routingTable != null) {
-                                if (Program.routingTable.Count > Program.Buren.Count + 1) {
-                                    lock (Program.thislock) {
-                                        foreach (Connection c in Program.Buren.Values) {
-                                            c.Write.WriteLine("purge");
-                                        }
-                                        Program.routingTable = null;
-                                        Program.RTInit();
+                            if (Program.routingTable.Count > Program.Buren.Count + 1) {
+                                lock (Program.thislock) {
+                                    foreach (Connection c in Program.Buren.Values) {
+                                        c.Write.WriteLine("purge");
                                     }
+                                    Program.routingTable.Clear();
+                                    Program.RTInit();
                                 }
                             }
                         }
@@ -167,6 +167,11 @@ namespace MultiClientServer {
                         // Als er een recompute uitgevoerd moet worden zonder dat je de hele boel wil doorgeven
                         else if (input == "recompute") {
                             Program.Recompute();
+                            /*lock (Program.thislock) {
+                                foreach (Connection c in Program.Buren.Values) {
+                                    c.Write.WriteLine("recompute");
+                                }
+                            }*/
                         }
                     }
                 }
@@ -192,6 +197,7 @@ namespace MultiClientServer {
         public void Replace(RTElem oldE, RTElem newE, string van) {
             Program.routingTable.Remove(oldE);
             Program.routingTable.Add(new RTElem(newE.port, newE.dist + 1, van));
+            Program.routingTable = Program.routingTable.Distinct().ToList();
             Console.WriteLine("Afstand naar " + newE.port + " is nu " + newE.dist + " via " + van);
         }
 

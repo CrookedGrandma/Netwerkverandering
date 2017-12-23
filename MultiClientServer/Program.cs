@@ -88,25 +88,22 @@ namespace MultiClientServer {
                         int poort = int.Parse(delen[1]);
                         if (Buren.ContainsKey(poort)) {
                             /*Buren[poort].Write.WriteLine("delete " + MijnPoort);
+                            //Connection tempCon = null;
+                            //if (Buren.Count == 1) tempCon = Buren[poort];
                             Buren.Remove(poort);
-                            foreach (RTElem elem in routingTable) {
-                                if (elem.port == poort) {
-                                    routingTable.Remove(elem);
-                                    routingTable.Add(new RTElem(poort, 9999999, elem.viaPort));
-                                    break;
+                            //if (Buren.Count == 0) tempCon.Write.WriteLine("recompute");
+                            routingTable.Clear();
+                            lock (thislock) {
+                                foreach (Connection c in Buren.Values) {
+                                    c.Write.WriteLine("purge");
                                 }
-                            }*/
-                            Buren[poort].Write.WriteLine("delete " + MijnPoort);
-                            Buren.Remove(poort);
-                            routingTable = null;
-                            foreach (Connection c in Buren.Values) {
-                                c.Write.WriteLine("purge");
                             }
                             RTInit();
                             //Thread.Sleep(1000);
                             if (Buren.Count > 0) {
                                 Buren.First().Value.Write.WriteLine("recompute");
                             }
+                            Recompute();*/
                             Console.WriteLine("Verbroken: " + delen[1]);
                         }
                         else {
@@ -122,6 +119,10 @@ namespace MultiClientServer {
                 }
                 else if (input.StartsWith("recompute")) {
                     Recompute();
+                }
+                else if (input.StartsWith("exit")) {
+                    Environment.Exit(0);
+                    break;
                 }
                 else {
                     Console.Write("//Onbekende instructie: ");
